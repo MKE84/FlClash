@@ -28,18 +28,44 @@ Map<String, String> _bindgenEnvironment(BuildInput input) {
     return const {};
   }
   final llvmRoot = File.fromUri(compiler).parent.parent;
-  for (final name in const ['lib', 'lib64']) {
-    final directory = Directory(
-      '${llvmRoot.path}${Platform.pathSeparator}$name',
-    );
-    if (directory.existsSync() && directory.listSync().any(_isLibclang)) {
-      return {'LIBCLANG_PATH': directory.path};
-    }
+  // A host without clang of its own reports a compiler in the NDK that carries
+  // none, so fall back to the NDK directory Flutter reported.
+  final ndk = input.config.code.ndk?.path;
+  final candidates = <Directory>[
+    llvmRoot,
+    if (ndk != null) Directory('$ndk/toolchains/llvm/prebuilt'),
+  ];
+  for (final root in candidates) {
+    final found = _libclang(root);
+    if (found != null) return {'LIBCLANG_PATH': found.path};
   }
   throw StateError(
     'No libclang under ${llvmRoot.path} (lib or lib64); the NDK Flutter '
     'passed cannot run bindgen for rquickjs',
   );
+}
+
+/// The first `lib` or `lib64` under [root] that holds a libclang, if any.
+/// [root] is either an llvm directory or `toolchains/llvm/prebuilt`, whose
+/// children are one llvm directory per host.
+Directory? _libclang(Directory root) {
+  if (!root.existsSync()) return null;
+  final hosts = [
+    root,
+    for (final entry in root.listSync())
+      if (entry is Directory && !entry.path.endsWith('/bin')) entry,
+  ];
+  for (final host in hosts) {
+    for (final name in const ['lib', 'lib64']) {
+      final directory = Directory(
+        '${host.path}${Platform.pathSeparator}$name',
+      );
+      if (directory.existsSync() && directory.listSync().any(_isLibclang)) {
+        return directory;
+      }
+    }
+  }
+  return null;
 }
 
 bool _isLibclang(FileSystemEntity entity) {
