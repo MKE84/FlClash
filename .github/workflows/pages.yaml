@@ -1,3 +1,4 @@
+# pages-fork.yaml deploys this site too; this copy is deleted there.
 name: pages
 
 on:
@@ -9,11 +10,6 @@ on:
       - 'tool/build_site.sh'
       - 'tool/render_site.mjs'
       - '.github/workflows/pages.yaml'
-  workflow_run:
-    workflows:
-      - build
-    types:
-      - completed
   workflow_dispatch:
 
 permissions:
