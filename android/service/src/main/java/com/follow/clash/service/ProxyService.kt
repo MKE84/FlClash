@@ -6,6 +6,7 @@ import android.os.Binder
 import android.os.IBinder
 import com.follow.clash.core.Core
 import com.follow.clash.service.modules.ServiceModules
+import com.follow.clash.service.transparent.TransparentProxyController
 
 class ProxyService : Service(), ManagedService {
     private val modules = ServiceModules(this)
@@ -53,5 +54,11 @@ class ProxyService : Service(), ManagedService {
         }
     }
 
-    private fun cleanup() = modules.stop()
+    private fun cleanup() {
+        try {
+            TransparentProxyController.remove()
+        } finally {
+            modules.stop()
+        }
+    }
 }

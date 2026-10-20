@@ -100,9 +100,19 @@ asks for nothing. The tap runs `SetupAction.restartVpn`: a stop, then a start, a
 | `routeAddress`         | `Tun.routeAddress` and `bypassPrivateRoute`                   | with the VPN                           |
 | `mtu`                  | `Tun`                                                         | with the VPN                           |
 | `congestionController` | `Tun`                                                         | with the VPN                           |
+| `transparentProxy`     | `VpnProps.transparentProxy`, off in safe mode                 | instead of the VPN                     |
+| `transparentProxyDns`  | `VpnProps.transparentProxyDns`, needs a DNS listen address    | with the redirect                      |
+| `redirectPort`         | `PatchClashConfig.redirPort`                                  | with the redirect                      |
+| `dnsRedirectPort`      | the port of `Dns.listen`                                      | with the redirect and its DNS redirect |
 
 The service never reads the access list's sort and filter fields. `effective` resets them, along with every field
 the table does not mark as read, so changing them does not ask for a restart.
+
+The redirect replaces the tunnel rather than adding to it: `enable` picks the service, and the two switches clear
+each other in `lib/views/config/network.dart`. `ServiceController.start` writes the iptables rules through `su` once
+`Core.startListener` has bound the ports they point at, and every path that ends the run removes them again — including
+`ProxyService`, whose `onDestroy` is the last caller when the process goes away without a clean stop. A redirect the
+service could not write fails the start instead of running without it.
 
 To add a VPN option:
 

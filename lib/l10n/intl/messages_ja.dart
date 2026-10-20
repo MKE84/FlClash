@@ -1534,6 +1534,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficPeak": m78,
     "trafficTotal": m79,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("トラフィック統計"),
+    "transparentProxy": MessageLookupByLibrary.simpleMessage("ルート透過プロキシ"),
+    "transparentProxyDesc": MessageLookupByLibrary.simpleMessage(
+      "su 経由で iptables ルールを設定し、システムの TCP 通信を redir ポートへ転送します。VPN が使えない端末でもプロキシでき、VpnService を占有しません。root 権限が必要で、ルールは再起動で消えます。UDP（QUIC など）は転送されずそのまま通過します。プロファイルに redir ポートが必要です。",
+    ),
+    "transparentProxyDns": MessageLookupByLibrary.simpleMessage("DNSをコアへ転送"),
     "transport": MessageLookupByLibrary.simpleMessage("トランスポート"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(

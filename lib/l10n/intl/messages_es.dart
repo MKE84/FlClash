@@ -1921,6 +1921,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficPeak": m78,
     "trafficTotal": m79,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Uso de tráfico"),
+    "transparentProxy": MessageLookupByLibrary.simpleMessage(
+      "Proxy transparente root",
+    ),
+    "transparentProxyDesc": MessageLookupByLibrary.simpleMessage(
+      "Instala reglas de iptables con su y dirige el tráfico TCP del sistema al puerto redir, para un dispositivo al que se le niega el VPN, sin ocupar un VpnService. Requiere root y las reglas desaparecen al reiniciar. El UDP (QUIC y el resto) no se redirige. El perfil necesita un puerto redir.",
+    ),
+    "transparentProxyDns": MessageLookupByLibrary.simpleMessage(
+      "Redirigir DNS al núcleo",
+    ),
     "transport": MessageLookupByLibrary.simpleMessage("Transporte"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(

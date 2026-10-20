@@ -66,6 +66,17 @@ final _toggleCases = <_ToggleCase>[
     (c) => c.read(vpnSettingProvider).dnsHijacking,
   ),
   _ToggleCase(
+    'transparent proxy',
+    const TransparentProxyItem(),
+    (c) => c.read(vpnSettingProvider).transparentProxy,
+  ),
+  _ToggleCase(
+    'transparent proxy dns',
+    const TransparentProxyDnsItem(),
+    (c) => c.read(vpnSettingProvider).transparentProxyDns,
+    initial: true,
+  ),
+  _ToggleCase(
     'bypass private route',
     const BypassPrivateRouteItem(),
     (c) => c.read(networkSettingProvider).bypassPrivateRoute,

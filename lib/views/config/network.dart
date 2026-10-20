@@ -69,7 +69,68 @@ class VPNItem extends ConsumerWidget {
     return _vpnToggle(
       title: (l) => 'VPN',
       select: (state) => state.enable,
-      update: (state, value) => state.copyWith(enable: value),
+      update: (state, value) => value
+          ? state.copyWith(enable: true, transparentProxy: false)
+          : state.copyWith(enable: false),
+    );
+  }
+}
+
+// A route around the tunnel for a device whose VPN is refused, so a run needs
+// either this or the VPN switch above, never both.
+class TransparentProxyItem extends ConsumerWidget {
+  const TransparentProxyItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    return ConfigToggleItem(
+      title: (l) => l.transparentProxy,
+      selector: vpnSettingProvider.select((state) => state.transparentProxy),
+      onChanged: (ref, value) {
+        ref
+            .read(vpnSettingProvider.notifier)
+            .update(
+              (state) => state.copyWith(
+                transparentProxy: value,
+                enable: value ? false : state.enable,
+              ),
+            );
+        if (!value) {
+          return;
+        }
+        ref
+            .read(patchClashConfigProvider.notifier)
+            .update(enableTransparentProxyPorts);
+      },
+    );
+  }
+}
+
+PatchClashConfig enableTransparentProxyPorts(PatchClashConfig config) {
+  const dnsListen = '127.0.0.1:1053';
+  final listen = config.dns.listen;
+  final dnsKeys = config.dnsOverrideKeys;
+  final needsDns = listen.isEmpty;
+  return config.copyWith(
+    redirPort: config.redirPort == 0 ? defaultRedirPort : config.redirPort,
+    dns: needsDns
+        ? config.dns.copyWith(enable: true, listen: dnsListen)
+        : config.dns,
+    dnsOverrideKeys: needsDns
+        ? {...dnsKeys, DnsOverrideKey.enable, DnsOverrideKey.listen}
+        : dnsKeys,
+  );
+}
+
+class TransparentProxyDnsItem extends ConsumerWidget {
+  const TransparentProxyDnsItem({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    return _vpnToggle(
+      title: (l) => l.transparentProxyDns,
+      select: (state) => state.transparentProxyDns,
+      update: (state, value) => state.copyWith(transparentProxyDns: value),
     );
   }
 }
@@ -527,6 +588,11 @@ class VpnSections extends ConsumerWidget {
             appLocalizations.bypassDomainDesc,
             appLocalizations.ipv6InboundDesc,
           ].join('\n'),
+        ),
+        generateSection(
+          title: appLocalizations.transparentProxy,
+          items: const [TransparentProxyItem(), TransparentProxyDnsItem()],
+          footer: appLocalizations.transparentProxyDesc,
         ),
       ],
     );

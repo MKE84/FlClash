@@ -236,13 +236,23 @@ Future<VpnOptions> vpnOptions(Ref ref) async {
   );
   final clashConfig = ref.watch(
     patchClashConfigProvider.select(
-      (state) => (tun: state.tun, mixedPort: state.mixedPort),
+      (state) => (
+        tun: state.tun,
+        mixedPort: state.mixedPort,
+        redirPort: state.redirPort,
+        dnsListen: state.dns.listen,
+      ),
     ),
   );
   final vpnSetting = ref.watch(vpnSettingProvider);
   final safeMode = ref.watch(safeModeProvider);
   final routeAddress = ref.watch(vpnRouteAddressProvider.future);
   final tun = clashConfig.tun;
+  final transparentProxy = vpnSetting.transparentProxy && !safeMode;
+  final transparentProxyDns =
+      transparentProxy &&
+      vpnSetting.transparentProxyDns &&
+      clashConfig.dnsListen.isNotEmpty;
   return VpnOptions(
     enable: vpnSetting.enable && !safeMode,
     stack: tun.stack.name,
@@ -259,7 +269,23 @@ Future<VpnOptions> vpnOptions(Ref ref) async {
     routeAddress: await routeAddress,
     mtu: tun.mtu,
     congestionController: tun.congestionController,
+    transparentProxy: transparentProxy,
+    transparentProxyDns: transparentProxyDns,
+    redirectPort: clashConfig.redirPort,
+    dnsRedirectPort: _listenPort(clashConfig.dnsListen),
   );
+}
+
+/// The port of a `host:port` DNS listen address, or 0 when it names none.
+int _listenPort(String listen) {
+  if (listen.isEmpty) {
+    return 0;
+  }
+  try {
+    return Uri.parse('tcp://$listen').port;
+  } on FormatException {
+    return 0;
+  }
 }
 
 @riverpod

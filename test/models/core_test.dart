@@ -156,6 +156,52 @@ void main() {
         proxyOnly.effective,
       );
     });
+
+    test('tells apart every option the redirect is built from', () {
+      final proxyOnly = options.copyWith(
+        enable: false,
+        transparentProxy: true,
+        redirectPort: 7892,
+        dnsRedirectPort: 1053,
+      );
+
+      final changes = [
+        proxyOnly.copyWith(transparentProxy: false),
+        proxyOnly.copyWith(redirectPort: 7893),
+        proxyOnly.copyWith(dnsRedirectPort: 1054),
+        proxyOnly.copyWith(transparentProxyDns: false),
+      ];
+
+      for (final changed in changes) {
+        expect(changed.effective, isNot(proxyOnly.effective));
+      }
+    });
+
+    test('the tunnel leaves the redirect options out', () {
+      expect(
+        options
+            .copyWith(
+              transparentProxy: true,
+              redirectPort: 7892,
+              dnsRedirectPort: 1053,
+            )
+            .effective,
+        options.effective,
+      );
+    });
+
+    test('a proxy-only run keeps the redirect', () {
+      final proxyOnly = options.copyWith(
+        enable: false,
+        transparentProxy: true,
+        redirectPort: 7892,
+        dnsRedirectPort: 1053,
+      );
+
+      expect(proxyOnly.effective.transparentProxy, isTrue);
+      expect(proxyOnly.effective.redirectPort, 7892);
+      expect(proxyOnly.effective.dnsRedirectPort, 1053);
+    });
   });
 
   group('ChangeProxyParams', () {

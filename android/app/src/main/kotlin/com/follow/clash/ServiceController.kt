@@ -15,6 +15,7 @@ import com.follow.clash.service.ProxyService
 import com.follow.clash.service.ServiceConfig
 import com.follow.clash.service.VpnService
 import com.follow.clash.service.models.VpnOptions
+import com.follow.clash.service.transparent.TransparentProxyController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -40,11 +41,17 @@ object ServiceController {
         binding = null
     }
 
-    // The Core listens exactly while a run exists, so every path that ends one closes it.
-    private fun release() {
+    // Core and kernel rules must be closed together on every end path.
+    private suspend fun release() {
         clearBinding()
         runtime = null
         Core.stopListener()
+        withContext(Dispatchers.IO) {
+            runCatching { TransparentProxyController.remove() }
+                .onFailure { error ->
+                    GlobalState.log("Unable to remove the transparent proxy rules: $error")
+                }
+        }
     }
 
     fun invokeMethod(data: String, callback: (ByteArray) -> Unit): Result<Unit> = runCatching {
@@ -105,9 +112,20 @@ object ServiceController {
         }
 
         Core.startListener()
+        val redirect = options.transparentProxyOptions
+        if (redirect.usable) {
+            val applied = runCatching { TransparentProxyController.apply(redirect) }
+            if (applied.isFailure) {
+                GlobalState.log("Unable to redirect through the transparent proxy: ${applied.exceptionOrNull()}")
+                tearDownServices()
+                release()
+                return@withLock false
+            }
+        }
         runtime = ServiceRuntime(
             vpn = options.enable,
             startedAtMillis = runtime?.startedAtMillis ?: System.currentTimeMillis(),
+            transparentProxy = options.transparentProxyOptions.started,
         )
         true
     }

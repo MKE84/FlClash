@@ -26,7 +26,21 @@ data class VpnOptions(
     val routeAddress: List<String>,
     val mtu: Int = 0,
     val congestionController: String? = null,
-)
+    val transparentProxy: Boolean = false,
+    val transparentProxyDns: Boolean = true,
+    val redirectPort: Int = 0,
+    val dnsRedirectPort: Int = 0,
+) {
+    // The four fields above are the shape Flutter writes; the service reads the
+    // redirect through one value so a rule is never built from half of it.
+    val transparentProxyOptions: TransparentProxyOptions
+        get() = TransparentProxyOptions(
+            enable = transparentProxy,
+            dnsRedirect = transparentProxyDns,
+            redirectPort = redirectPort,
+            dnsPort = dnsRedirectPort,
+        )
+}
 
 private const val DEFAULT_TUN_MTU = 9000
 

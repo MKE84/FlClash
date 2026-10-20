@@ -41,6 +41,7 @@ const defaultGeoXUrl = {
 };
 
 const defaultMixedPort = 7890;
+const defaultRedirPort = 7892;
 const defaultKeepAliveInterval = 30;
 const defaultTunMtu = 9000;
 const minTunMtu = 1280;

@@ -156,7 +156,11 @@ private class FakeHost(override val scope: CoroutineScope) : ServiceStateHost {
         if (!startSucceeds) {
             return false
         }
-        runtime = ServiceRuntime(vpn = runsAsVpn ?: options.enable, startedAtMillis = STARTED_AT)
+        runtime = ServiceRuntime(
+            vpn = runsAsVpn ?: options.enable,
+            startedAtMillis = STARTED_AT,
+            transparentProxy = options.transparentProxyOptions.started,
+        )
         return true
     }
 
@@ -877,5 +881,48 @@ class ServiceStateMachineTest {
         assertTrue(host.logs.any { it.contains("binder died") })
         assertFalse(machine.captureRequestToken().running)
         assertEquals(RunState.STOPPED, machine.runState.value)
+    }
+
+    @Test
+    fun `a redirect the service could not write is not a run to reuse`() = runTest {
+        val host = FakeHost(backgroundScope)
+        val machine = ServiceStateMachine(host)
+        machine.syncSharedState(configuredState())
+        machine.requestStart().await()
+
+        val withRedirect = vpnOptions().copy(
+            transparentProxy = true,
+            redirectPort = 7892,
+            dnsRedirectPort = 1053,
+        )
+        machine.syncSharedState(
+            SharedState(
+                vpnOptions = withRedirect,
+                setupParams = SetupParams(testUrl = "https://example.com", selectedMap = emptyMap()),
+            ),
+        )
+        machine.requestStart().await()
+
+        assertEquals(2, host.startCalls)
+    }
+
+    @Test
+    fun `the same redirect does not restart a run`() = runTest {
+        val host = FakeHost(backgroundScope)
+        val machine = ServiceStateMachine(host)
+        val state = SharedState(
+            vpnOptions = vpnOptions(enable = false).copy(
+                transparentProxy = true,
+                redirectPort = 7892,
+                dnsRedirectPort = 1053,
+            ),
+            setupParams = SetupParams(testUrl = "https://example.com", selectedMap = emptyMap()),
+        )
+        machine.syncSharedState(state)
+        machine.requestStart().await()
+        machine.syncSharedState(state)
+        machine.requestStart().await()
+
+        assertEquals(1, host.startCalls)
     }
 }

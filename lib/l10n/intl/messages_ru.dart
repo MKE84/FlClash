@@ -1875,6 +1875,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficPeak": m78,
     "trafficTotal": m79,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Статистика трафика"),
+    "transparentProxy": MessageLookupByLibrary.simpleMessage(
+      "Прозрачный прокси с root",
+    ),
+    "transparentProxyDesc": MessageLookupByLibrary.simpleMessage(
+      "Через su устанавливает правила iptables и направляет системный TCP-трафик на порт redir, поэтому устройство, которому отказано в VPN, тоже может проксироваться, не занимая VpnService. Нужен root, правила исчезают после перезагрузки. UDP (QUIC и другое) не перенаправляется. В профиле должен быть порт redir.",
+    ),
+    "transparentProxyDns": MessageLookupByLibrary.simpleMessage(
+      "Перенаправлять DNS в ядро",
+    ),
     "transport": MessageLookupByLibrary.simpleMessage("Транспорт"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(

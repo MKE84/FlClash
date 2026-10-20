@@ -12,6 +12,7 @@ import com.follow.clash.plugins.ServicePlugin
 import com.follow.clash.plugins.TilePlugin
 import com.follow.clash.service.ServiceConfig
 import com.follow.clash.service.models.NotificationParams
+import com.follow.clash.service.models.TransparentProxyOptions
 import com.follow.clash.service.models.VpnOptions
 import io.flutter.embedding.engine.FlutterEngine
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +20,12 @@ import kotlinx.coroutines.CoroutineScope
 internal data class ServiceRuntime(
     val vpn: Boolean,
     val startedAtMillis: Long,
+    val transparentProxy: TransparentProxyOptions = TransparentProxyOptions(
+        enable = false,
+        dnsRedirect = false,
+        redirectPort = 0,
+        dnsPort = 0,
+    ),
 )
 
 /**

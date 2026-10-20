@@ -3815,6 +3815,36 @@ class AppLocalizations {
     return Intl.message('Redir port', name: 'redirPort', desc: '', args: []);
   }
 
+  /// `Root transparent proxy`
+  String get transparentProxy {
+    return Intl.message(
+      'Root transparent proxy',
+      name: 'transparentProxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redirect DNS through the core`
+  String get transparentProxyDns {
+    return Intl.message(
+      'Redirect DNS through the core',
+      name: 'transparentProxyDns',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Installs iptables rules through su and points system TCP traffic at the redir port, so a device whose VPN is refused can still be routed, without a VpnService. The rules need root and disappear on reboot. UDP is not redirected: QUIC and other UDP traffic leaves directly. The profile needs a redir port.`
+  String get transparentProxyDesc {
+    return Intl.message(
+      'Installs iptables rules through su and points system TCP traffic at the redir port, so a device whose VPN is refused can still be routed, without a VpnService. The rules need root and disappear on reboot. UDP is not redirected: QUIC and other UDP traffic leaves directly. The profile needs a redir port.',
+      name: 'transparentProxyDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `TProxy port`
   String get tproxyPort {
     return Intl.message('TProxy port', name: 'tproxyPort', desc: '', args: []);

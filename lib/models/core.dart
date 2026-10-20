@@ -86,6 +86,10 @@ abstract class VpnOptions with _$VpnOptions {
     @Default([]) List<String> routeAddress,
     @Default(0) int mtu,
     @Default('') String congestionController,
+    @Default(false) bool transparentProxy,
+    @Default(true) bool transparentProxyDns,
+    @Default(0) int redirectPort,
+    @Default(0) int dnsRedirectPort,
   }) = _VpnOptions;
 
   factory VpnOptions.fromJson(Map<String, Object?> json) =>
@@ -93,19 +97,25 @@ abstract class VpnOptions with _$VpnOptions {
 }
 
 extension VpnOptionsExt on VpnOptions {
-  /// Only what `ServiceController.start` and `VpnService.handleStart` read.
   VpnOptions get effective {
     if (!enable) {
-      return const VpnOptions(
+      final transparentProxy = this.transparentProxy;
+      final dnsRedirect =
+          transparentProxy && transparentProxyDns && dnsRedirectPort > 0;
+      return VpnOptions(
         enable: false,
         port: 0,
         ipv6: false,
         dnsHijacking: false,
-        accessControlProps: AccessControlProps(),
+        accessControlProps: const AccessControlProps(),
         allowBypass: false,
         systemProxy: false,
-        bypassDomain: [],
+        bypassDomain: const [],
         stack: '',
+        transparentProxy: transparentProxy,
+        transparentProxyDns: transparentProxy && transparentProxyDns,
+        redirectPort: transparentProxy ? redirectPort : 0,
+        dnsRedirectPort: dnsRedirect ? dnsRedirectPort : 0,
       );
     }
     final accessControl = accessControlProps;
@@ -113,6 +123,10 @@ extension VpnOptionsExt on VpnOptions {
     return copyWith(
       port: systemProxy ? port : 0,
       bypassDomain: systemProxy ? bypassDomain : const [],
+      transparentProxy: false,
+      transparentProxyDns: false,
+      redirectPort: 0,
+      dnsRedirectPort: 0,
       accessControlProps: accessControl.enable
           ? AccessControlProps(
               enable: true,

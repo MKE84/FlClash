@@ -140,7 +140,17 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
 
     // No new request for a settled run: one refused at a prompt would take the service down.
     private fun isStartedAs(options: VpnOptions?): Boolean =
-        runState.value == RunState.STARTED && host.runtime?.vpn == options?.enable
+        runState.value == RunState.STARTED && isRunningAs(options)
+
+    // The redirect is written by the service that owns the run, so a run that
+    // switches to it while the ProxyService is already serving has to replace an
+    // unchanged one: the tunnel-vs-redirect choice is part of what it runs.
+    private fun isRunningAs(options: VpnOptions?): Boolean {
+        if (options == null || host.runtime?.vpn != options.enable) {
+            return false
+        }
+        return host.runtime?.transparentProxy == options.transparentProxyOptions.started
+    }
 
     // The intent is claimed before the Core is set up, so a second action that lands meanwhile
     // toggles this start off instead of racing a second setup against it.
@@ -249,7 +259,7 @@ internal class ServiceStateMachine(private val host: ServiceStateHost) {
         return transitionLock.withLock {
             when {
                 !isCurrent(request) -> false
-                host.runtime?.vpn == options.enable -> true
+                isRunningAs(options) -> true
                 else -> transitioning(RunState.STARTING) {
                     host.startService(withLocalNetworkFallback(options)) && isCurrent(request)
                 }

@@ -1507,6 +1507,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficPeak": m78,
     "trafficTotal": m79,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("트래픽 사용량"),
+    "transparentProxy": MessageLookupByLibrary.simpleMessage("루트 투명 프록시"),
+    "transparentProxyDesc": MessageLookupByLibrary.simpleMessage(
+      "su를 통해 iptables 규칙을 설치하고 시스템 TCP 트래픽을 redir 포트로 보냅니다. VPN이 거부되는 기기에서도 프록시할 수 있고 VpnService를 점유하지 않습니다. root 권한이 필요하며 규칙은 재부팅 시 사라집니다. UDP(QUIC 등)는 프록시되지 않고 그대로 나갑니다. 프로필에 redir 포트가 필요합니다.",
+    ),
+    "transparentProxyDns": MessageLookupByLibrary.simpleMessage("DNS를 코어로 전달"),
     "transport": MessageLookupByLibrary.simpleMessage("전송"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(

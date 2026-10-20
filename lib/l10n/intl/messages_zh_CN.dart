@@ -1385,6 +1385,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficPeak": m78,
     "trafficTotal": m79,
     "trafficUsage": MessageLookupByLibrary.simpleMessage("流量统计"),
+    "transparentProxy": MessageLookupByLibrary.simpleMessage("Root 透明代理"),
+    "transparentProxyDesc": MessageLookupByLibrary.simpleMessage(
+      "通过 su 安装 iptables 规则，把系统 TCP 流量指向 redir 端口；VPN 被拒绝的设备也能走代理，且不占用 VpnService。需要 root 权限，规则重启后失效。不转发 UDP：QUIC 等 UDP 流量直接放行。配置里需要有 redir 端口。",
+    ),
+    "transparentProxyDns": MessageLookupByLibrary.simpleMessage("转发DNS到内核"),
     "transport": MessageLookupByLibrary.simpleMessage("传输协议"),
     "tun": MessageLookupByLibrary.simpleMessage("虚拟网卡"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(
