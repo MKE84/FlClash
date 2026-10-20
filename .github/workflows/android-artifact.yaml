@@ -64,7 +64,6 @@ jobs:
         id: ndk
         with:
           ndk-version: ${{ env.NDK_VERSION }}
-          add-to-path: true
           link-to-sdk: true
 
       - name: Setup Android signing
@@ -74,7 +73,6 @@ jobs:
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          echo "ANDROID_NDK_HOME=$ANDROID_NDK_HOME" >> "$GITHUB_ENV"
           if [ -n "$KEYSTORE_BASE64" ]; then
             echo "$KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
             {
