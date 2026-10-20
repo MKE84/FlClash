@@ -7,11 +7,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'site/**'
-      - 'tool/build_site.sh'
-      - 'tool/render_site.mjs'
-      - '.github/workflows/pages.yaml'
   workflow_dispatch:
 
 permissions:
