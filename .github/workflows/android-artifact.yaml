@@ -64,6 +64,7 @@ jobs:
         id: ndk
         with:
           ndk-version: ${{ env.NDK_VERSION }}
+          add-to-path: true
           link-to-sdk: true
 
       - name: Setup Android signing
@@ -73,6 +74,9 @@ jobs:
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
+          # Flutter's native-assets pass reports this NDK to the Rust hook, which
+          # loads its libclang for bindgen; the runner's own NDK has none to load.
+          echo "ANDROID_NDK_HOME=$ANDROID_NDK_HOME" >> "$GITHUB_ENV"
           if [ -n "$KEYSTORE_BASE64" ]; then
             echo "$KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
             {
@@ -85,8 +89,6 @@ jobs:
             echo '::warning::No KEYSTORE secret; the APK will be debug-signed (installable, not upgradeable over a release build).'
           fi
 
-      # The native build hooks fetch the Go core and the Rust/C++ bits themselves,
-      # so there is no extra fetch step here.
       - name: Get Flutter dependencies
         run: |
           flutter --version
@@ -102,8 +104,6 @@ jobs:
           curl -fsSL --retry 3 -o "$bundle" "https://curl.se/ca/$CA_BUNDLE"
           echo "$CA_BUNDLE_SHA256  $bundle" | sha256sum -c -
 
-      # setup.dart packages through flutter_distributor and refuses to run when a
-      # package's build_assets hook was turned off, so podspec/pubspec stay untouched.
       - name: Build APK
         run: |
           set -euo pipefail
