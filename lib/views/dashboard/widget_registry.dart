@@ -5,11 +5,11 @@ import 'package:fl_clash/views/dashboard/widgets/widgets.dart';
 import 'package:material_ui/material_ui.dart';
 
 extension DashboardWidgetView on DashboardWidget {
-  Widget get card => switch (this) {
+  Widget card({VoidCallback? onEdit}) => switch (this) {
     DashboardWidget.currentOutbound => const CurrentOutboundCard(),
     DashboardWidget.networkSpeed => const NetworkSpeedCard(),
     DashboardWidget.outboundMode => const OutboundModeCard(),
-    DashboardWidget.vpnButton => const VpnCard(),
+    DashboardWidget.vpnButton => VpnCard(onLongPress: onEdit),
     DashboardWidget.networkTakeover => const NetworkTakeoverCard(),
     DashboardWidget.serviceStatus => const ServiceStatusCard(),
     DashboardWidget.profiles => const ProfilesCard(),

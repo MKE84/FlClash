@@ -119,7 +119,6 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
   final profileId = data.profileId;
   final overrides = data.overrides;
   final addedRules = data.addedRules;
-  final appendSystemDns = data.appendSystemDns;
   final defaultUA = data.defaultUA;
   String getProvidersFilePathInner(String type, String key) {
     return join(
@@ -219,12 +218,6 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
     ...realPatchConfig.tun.coreJson,
     'auto-detect-interface': true,
   };
-  if (data.bypassPrivateRoute) {
-    tun['route-exclude-address'] = [
-      if (tun['route-exclude-address'] case final List routes) ...routes,
-      ...privateRouteAddress,
-    ];
-  }
   rawConfig['tun'] = tun;
   rawConfig['geodata-loader'] = realPatchConfig.geodataLoader.name;
   rawConfig['geo-auto-update'] = realPatchConfig.geoAutoUpdate;
@@ -282,7 +275,6 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
       ? Map<String, dynamic>.from(rawConfig['dns'] as Map)
       : <String, dynamic>{};
   final isEnableDns = rawDns['enable'] == true;
-  const systemDns = 'system://';
   if (!isEnableDns) {
     rawDns = mergeDnsOverride(
       rawDns,
@@ -303,14 +295,6 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
         ? Map<String, dynamic>.from(rawConfig['ntp'] as Map)
         : <String, dynamic>{};
     rawConfig['ntp'] = {...rawNtp, ...ntpOverride};
-  }
-  if (appendSystemDns) {
-    final List<String> nameserver = List<String>.from(
-      rawConfig['dns']['nameserver'] ?? [],
-    );
-    if (!nameserver.contains(systemDns)) {
-      rawConfig['dns']['nameserver'] = [...nameserver, systemDns];
-    }
   }
   if (data.safeMode) {
     rawConfig['listeners'] = [];

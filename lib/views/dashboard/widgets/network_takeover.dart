@@ -230,7 +230,11 @@ class VpnTile extends ConsumerWidget {
 }
 
 class VpnCard extends ConsumerWidget {
-  const VpnCard({super.key});
+  const VpnCard({super.key, this.onLongPress});
+
+  /// A long press on the round start button. The dashboard uses it to enter
+  /// editing, since the button is the only handle once the edit action is gone.
+  final VoidCallback? onLongPress;
 
   static const _iconSize = 48.0;
 
@@ -243,56 +247,59 @@ class VpnCard extends ConsumerWidget {
       vpnSettingProvider.select((state) => state.enable),
     );
     void change(bool value) => _setVpn(ref, value);
-    return DashboardCard(
-      semanticLabel: 'VPN',
-      padding: dashboardCardPadding(
-        DashboardDensityScope.of(context),
-      ).copyWith(top: 16, bottom: 16),
-      onTap: () => change(!enabled),
-      child: Row(
-        spacing: 14,
-        children: [
-          ShapeBadge(
-            shape: enabled
-                ? MaterialShapes.cookie6Sided
-                : MaterialShapes.circle,
-            color: enabled ? colorScheme.primary : colors.tone,
-            size: _iconSize,
-            child: GlyphIcon(
-              AppGlyphs.vpn,
-              size: 22,
-              color: enabled
-                  ? colorScheme.onPrimary
-                  : colorScheme.onSurfaceVariant,
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: DashboardCard(
+        semanticLabel: 'VPN',
+        padding: dashboardCardPadding(
+          DashboardDensityScope.of(context),
+        ).copyWith(top: 16, bottom: 16),
+        onTap: () => change(!enabled),
+        child: Row(
+          spacing: 14,
+          children: [
+            ShapeBadge(
+              shape: enabled
+                  ? MaterialShapes.cookie6Sided
+                  : MaterialShapes.circle,
+              color: enabled ? colorScheme.primary : colors.tone,
+              size: _iconSize,
+              child: GlyphIcon(
+                AppGlyphs.vpn,
+                size: 22,
+                color: enabled
+                    ? colorScheme.onPrimary
+                    : colorScheme.onSurfaceVariant,
+              ),
             ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'VPN',
-                  style: AppTextStyle.callout.of(context, emphasized: true),
-                ),
-                Text(
-                  enabled
-                      ? appLocalizations.enabled
-                      : appLocalizations.disabled,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyle.footnote
-                      .of(context)
-                      .copyWith(color: colorScheme.onSurfaceVariant),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'VPN',
+                    style: AppTextStyle.callout.of(context, emphasized: true),
+                  ),
+                  Text(
+                    enabled
+                        ? appLocalizations.enabled
+                        : appLocalizations.disabled,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.footnote
+                        .of(context)
+                        .copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                ],
+              ),
             ),
-          ),
-          DashboardSwitch(
-            value: enabled,
-            semanticLabel: 'VPN',
-            onChanged: change,
-          ),
-        ],
+            DashboardSwitch(
+              value: enabled,
+              semanticLabel: 'VPN',
+              onChanged: change,
+            ),
+          ],
+        ),
       ),
     );
   }

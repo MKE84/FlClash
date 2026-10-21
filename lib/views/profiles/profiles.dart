@@ -66,32 +66,6 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
     _isUpdating = false;
   }
 
-  List<IconButtonData> _buildActions(List<Profile> profiles) {
-    return profiles.isNotEmpty
-        ? [
-            IconButtonData(
-              glyph: AppGlyphs.sync,
-              onPressed: () {
-                _updateProfiles(profiles);
-              },
-              tooltip: context.appLocalizations.update,
-            ),
-            IconButtonData(
-              glyph: AppGlyphs.sort,
-              onPressed: () {
-                showSheet(
-                  context: context,
-                  builder: (_) {
-                    return ReorderableProfilesSheet(profiles: profiles);
-                  },
-                );
-              },
-              tooltip: context.appLocalizations.profilesSort,
-            ),
-          ]
-        : [];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -111,7 +85,7 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
                   onPressed: () => showAddProfilePage(context),
                   tooltip: appLocalizations.addProfile,
                 ),
-          iconActions: picker ? const [] : _buildActions(state.profiles),
+          iconActions: picker ? const [] : const [],
           foldPrimaryAction: true,
           body: NullStatusSwitcher(
             isEmpty: state.profiles.isEmpty,
@@ -131,6 +105,7 @@ class _ProfilesViewState extends ConsumerState<ProfilesView> {
               currentProfileId: state.currentProfileId,
               spacing: spacing,
               revealsSelected: !picker,
+              onRefresh: () => _updateProfiles(state.profiles),
             ),
           ),
         );
@@ -145,12 +120,14 @@ class _ProfilesGrid extends ConsumerStatefulWidget {
     required this.currentProfileId,
     required this.spacing,
     required this.revealsSelected,
+    required this.onRefresh,
   });
 
   final List<Profile> profiles;
   final int? currentProfileId;
   final double spacing;
   final bool revealsSelected;
+  final Future<void> Function() onRefresh;
 
   @override
   ConsumerState<_ProfilesGrid> createState() => _ProfilesGridState();
@@ -232,28 +209,31 @@ class _ProfilesGridState extends ConsumerState<_ProfilesGrid> {
     final profiles = widget.profiles;
     return WidthBuilder(
       builder: (_, width) {
-        return GridView.builder(
-          key: profilesStoreKey,
-          controller: _controller,
-          padding: _padding,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: _columnsFor(width),
-            mainAxisSpacing: widget.spacing,
-            crossAxisSpacing: widget.spacing,
-            mainAxisExtent: _profileItemHeight,
+        return RefreshIndicator(
+          onRefresh: widget.onRefresh,
+          child: GridView.builder(
+            key: profilesStoreKey,
+            controller: _controller,
+            padding: _padding,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: _columnsFor(width),
+              mainAxisSpacing: widget.spacing,
+              crossAxisSpacing: widget.spacing,
+              mainAxisExtent: _profileItemHeight,
+            ),
+            itemCount: profiles.length,
+            itemBuilder: (context, index) {
+              final profile = profiles[index];
+              return ProfileItem(
+                key: ValueKey(profile.id),
+                profile: profile,
+                groupValue: widget.currentProfileId,
+                onChanged: (profileId) {
+                  ref.read(currentProfileIdProvider.notifier).value = profileId;
+                },
+              );
+            },
           ),
-          itemCount: profiles.length,
-          itemBuilder: (context, index) {
-            final profile = profiles[index];
-            return ProfileItem(
-              key: ValueKey(profile.id),
-              profile: profile,
-              groupValue: widget.currentProfileId,
-              onChanged: (profileId) {
-                ref.read(currentProfileIdProvider.notifier).value = profileId;
-              },
-            );
-          },
         );
       },
     );

@@ -442,13 +442,11 @@ class SetupAction extends _$SetupAction {
     final networkSetting = ref.read(
       networkSettingProvider.select(
         (state) => (
-          appendSystemDns: state.appendSystemDns,
           bypassPrivateRoute: state.bypassPrivateRoute,
           authentication: state.authentication,
         ),
       ),
     );
-    final appendSystemDns = networkSetting.appendSystemDns;
     final isCustom = setupState.profileType == ProfileType.custom;
     final scriptContent =
         !isCustom && setupState.extendType == ExtendType.script
@@ -491,7 +489,7 @@ class SetupAction extends _$SetupAction {
         overrides: setupState.overrides,
         bypassPrivateRoute: networkSetting.bypassPrivateRoute,
         keepEmptyDnsOverrides: setupState.profileType != ProfileType.custom,
-        appendSystemDns: appendSystemDns,
+        appendSystemDns: false,
         addedRules: setupState.addedRules,
         defaultUA: defaultUA,
         authentication: networkSetting.authentication.credentials,
@@ -594,9 +592,10 @@ class SetupAction extends _$SetupAction {
         externalController: ExternalControllerStatus.close,
       );
     }
-    final config = ref.read(vpnSettingProvider).transparentProxy
-        ? redirectingPorts(patchConfig)
-        : patchConfig;
+    final config = appliedPorts(
+      patchConfig,
+      redirecting: ref.read(vpnSettingProvider).transparentProxy,
+    );
     final authorized =
         ref.read(authorizedTunEnableProvider) ==
         TunAuthorizationState.authorized;

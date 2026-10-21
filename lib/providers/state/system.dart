@@ -25,9 +25,7 @@ setupPatch(Ref ref) {
     patchConfig: ref.watch(
       patchClashConfigProvider.select((state) => state.setupOnly),
     ),
-    appendSystemDns: ref.watch(
-      networkSettingProvider.select((state) => state.appendSystemDns),
-    ),
+    appendSystemDns: false,
     // Android's VPN service takes it on its next start instead.
     bypassPrivateRoute:
         system.isDesktop &&
@@ -251,21 +249,24 @@ Future<VpnOptions> vpnOptions(Ref ref) async {
   final safeMode = ref.watch(safeModeProvider);
   final routeAddress = ref.watch(vpnRouteAddressProvider.future);
   final tun = clashConfig.tun;
-  final transparentProxy = vpnSetting.transparentProxy && !safeMode;
+  // Android has no VPN mode: the tunnel is refused on the devices this
+  // build targets, so a run always redirects and never starts VpnService.
+  final transparentProxy = system.isAndroid
+      ? !safeMode
+      : vpnSetting.transparentProxy && !safeMode;
   final transparentProxyDns =
       transparentProxy && vpnSetting.transparentProxyDns;
   final dnsListen = transparentProxy
       ? redirectingDnsListen(clashConfig.dnsListen)
       : clashConfig.dnsListen;
   return VpnOptions(
-    enable: vpnSetting.enable && !safeMode,
+    enable: system.isAndroid ? false : vpnSetting.enable && !safeMode,
     stack: tun.stack.name,
     // VpnService.setHttpProxy cannot carry credentials, so an authenticated
     // mixed port is left to TUN instead of declared as the system proxy.
     systemProxy:
         vpnSetting.systemProxy && !networkSetting.authenticated && !safeMode,
     port: clashConfig.mixedPort,
-    ipv6: vpnSetting.ipv6,
     dnsHijacking: vpnSetting.dnsHijacking,
     accessControlProps: vpnSetting.accessControlProps,
     allowBypass: vpnSetting.allowBypass,
@@ -275,7 +276,11 @@ Future<VpnOptions> vpnOptions(Ref ref) async {
     congestionController: tun.congestionController,
     transparentProxy: transparentProxy,
     transparentProxyDns: transparentProxyDns,
-    transparentProxyIpv6: transparentProxy && vpnSetting.transparentProxyIpv6,
+    transparentProxyIpv6:
+        transparentProxy && vpnSetting.transparentProxyIpv6,
+    // One switch drives every IPv6 path: blocking it also turns the core's
+    // own IPv6 off, so nothing keeps resolving AAAA beside the block.
+    ipv6: transparentProxy ? !vpnSetting.transparentProxyIpv6 : vpnSetting.ipv6,
     redirectPort: transparentProxy
         ? redirectingRedirPort(
             clashConfig.redirPort,

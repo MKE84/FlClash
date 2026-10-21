@@ -216,7 +216,7 @@ class _DashboardEditorState extends ConsumerState<DashboardEditor>
                     child: AbsorbPointer(
                       child: RepaintBoundary(
                         key: widget.cardKeyOf(cards[index]),
-                        child: cards[index].card,
+                        child: cards[index].card(),
                       ),
                     ),
                   ),
@@ -426,7 +426,7 @@ class _EditableCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
     final card = AbsorbPointer(
-      child: RepaintBoundary(key: cardKey, child: item.card),
+      child: RepaintBoundary(key: cardKey, child: item.card()),
     );
     final onRemove = this.onRemove;
     final content = Stack(

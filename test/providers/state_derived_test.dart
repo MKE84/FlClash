@@ -973,8 +973,10 @@ void main() {
         .update(
           (state) => state.copyWith(appendSystemDns: !state.appendSystemDns),
         );
+    // The system resolver is never appended, so the switch no longer changes
+    // what a re-apply carries.
     final withSystemDns = container.read(setupPatchProvider);
-    expect(withSystemDns, isNot(withHosts));
+    expect(withSystemDns, withHosts);
 
     container
         .read(networkSettingProvider.notifier)

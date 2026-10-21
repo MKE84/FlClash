@@ -41,6 +41,10 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     setState(() => _editing = editing);
   }
 
+  /// A long press on the round start button enters editing; the button lives in
+  /// a card that cannot see this state, so it reaches up for it.
+  void edit() => _setEditing(true);
+
   GlobalKey _cardKeyOf(DashboardWidget widget) =>
       _cardKeys.putIfAbsent(widget, GlobalKey.new);
 
@@ -60,9 +64,8 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
     final appLocalizations = context.appLocalizations;
     return CommonScaffold(
       backgroundColor: DashboardColors.of(context).page,
-      title: editing
-          ? appLocalizations.editDashboard
-          : appLocalizations.dashboard,
+      titleWidget: editing ? null : const SizedBox.shrink(),
+      title: editing ? appLocalizations.editDashboard : null,
       backAction: editing ? () => _setEditing(false) : null,
       actions: [if (!editing && coreLib == null) const CoreStatusButton()],
       confirmationAction: editing
@@ -72,14 +75,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
               onPressed: () => _setEditing(false),
             )
           : null,
-      iconActions: [
-        if (editable && !editing)
-          IconButtonData(
-            glyph: AppGlyphs.edit,
-            tooltip: appLocalizations.editDashboard,
-            onPressed: () => _setEditing(true),
-          ),
-      ],
+      iconActions: const [],
       // The providers learn a resize a frame late, too late for the cards.
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -99,6 +95,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
                     gap: gap,
                     editing: editing,
                     cardKeyOf: _cardKeyOf,
+                    onEdit: () => _setEditing(true),
                     onDone: () => _setEditing(false),
                   ),
           );
@@ -293,6 +290,7 @@ class _MobileDashboard extends ConsumerWidget {
     required this.gap,
     required this.editing,
     required this.cardKeyOf,
+    required this.onEdit,
     required this.onDone,
   });
 
@@ -300,6 +298,7 @@ class _MobileDashboard extends ConsumerWidget {
   final double gap;
   final bool editing;
   final GlobalKey Function(DashboardWidget widget) cardKeyOf;
+  final VoidCallback onEdit;
   final VoidCallback onDone;
 
   @override
@@ -343,7 +342,7 @@ class _MobileDashboard extends ConsumerWidget {
                     for (final widget in widgets)
                       RepaintBoundary(
                         key: cardKeyOf(widget),
-                        child: widget.card,
+                        child: widget.card(onEdit: onEdit),
                       ),
                   ],
                 ),

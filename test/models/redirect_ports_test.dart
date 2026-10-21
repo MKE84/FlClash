@@ -47,6 +47,25 @@ void main() {
       expect(redirectingRedirPort(7893), 7893);
     });
 
+    test('a run that does not redirect keeps the redir listener closed', () {
+      const config = PatchClashConfig(redirPort: 7895);
+
+      final applied = appliedPorts(config, redirecting: false);
+
+      expect(applied.redirPort, 0);
+      expect(applied.dns.listen, config.dns.listen);
+    });
+
+    test('only a redirecting run derives a redir port', () {
+      const config = PatchClashConfig();
+
+      expect(
+        appliedPorts(config, redirecting: true).redirPort,
+        defaultRedirPort,
+      );
+      expect(appliedPorts(config, redirecting: false).redirPort, 0);
+    });
+
     test('the redirect also steps over the DNS port it points at', () {
       const config = PatchClashConfig(redirPort: 1053, dns: Dns(listen: ''));
 

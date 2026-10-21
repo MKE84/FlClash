@@ -25,45 +25,15 @@ class _ToggleCase {
 
 final _toggleCases = <_ToggleCase>[
   _ToggleCase(
-    'VPN',
-    const VPNItem(),
-    (c) => c.read(vpnSettingProvider).enable,
-    initial: true,
-  ),
-  _ToggleCase(
     'TUN',
     const TUNItem(),
     (c) => c.read(patchClashConfigProvider).tun.enable,
-  ),
-  _ToggleCase(
-    'allow bypass',
-    const AllowBypassItem(),
-    (c) => c.read(vpnSettingProvider).allowBypass,
-    initial: true,
-  ),
-  _ToggleCase(
-    'vpn system proxy',
-    const VpnSystemProxyItem(),
-    (c) => c.read(vpnSettingProvider).systemProxy,
-    initial: true,
   ),
   _ToggleCase(
     'system proxy',
     const SystemProxyItem(),
     (c) => c.read(networkSettingProvider).systemProxy,
     initial: true,
-  ),
-  _ToggleCase('ipv6', const Ipv6Item(), (c) => c.read(vpnSettingProvider).ipv6),
-  _ToggleCase(
-    'auto set system dns',
-    const AutoSetSystemDnsItem(),
-    (c) => c.read(networkSettingProvider).autoSetSystemDns,
-    initial: true,
-  ),
-  _ToggleCase(
-    'dns hijacking',
-    const DNSHijackingItem(),
-    (c) => c.read(vpnSettingProvider).dnsHijacking,
   ),
   _ToggleCase(
     'transparent proxy',
@@ -80,12 +50,6 @@ final _toggleCases = <_ToggleCase>[
     'transparent proxy ipv6',
     const TransparentProxyIpv6Item(),
     (c) => c.read(vpnSettingProvider).transparentProxyIpv6,
-  ),
-  _ToggleCase(
-    'bypass private route',
-    const BypassPrivateRouteItem(),
-    (c) => c.read(networkSettingProvider).bypassPrivateRoute,
-    initial: true,
   ),
 ];
 
@@ -226,10 +190,9 @@ void main() {
 
     test('Android sets the routes its VPN service starts with', () {
       final types = items().map((item) => item.runtimeType);
-      expect(types, contains(BypassPrivateRouteItem));
       expect(types, contains(RouteAddressItem));
-      expect(items(), hasLength(5));
-      expect(items(isMipsStack: false), hasLength(4));
+      expect(items(), hasLength(4));
+      expect(items(isMipsStack: false), hasLength(3));
     });
 
     Widget desktopSection({bool isWindows = false}) =>
@@ -246,7 +209,6 @@ void main() {
     ) async {
       await pumpItem(tester, desktopSection());
       final l = currentAppLocalizations;
-      expect(find.text(l.bypassPrivateRoute), findsOneWidget);
       expect(find.text('MTU'), findsNothing);
       expect(find.textContaining(l.tunOverrideDesc), findsOneWidget);
 

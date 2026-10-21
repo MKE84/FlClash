@@ -61,23 +61,6 @@ ConfigToggleItem _networkToggle({
   );
 }
 
-class VPNItem extends ConsumerWidget {
-  const VPNItem({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return _vpnToggle(
-      title: (l) => 'VPN',
-      select: (state) => state.enable,
-      update: (state, value) => value
-          ? state.copyWith(enable: true, transparentProxy: false)
-          : state.copyWith(enable: false),
-    );
-  }
-}
-
-// A route around the tunnel for a device whose VPN is refused, so a run needs
-// either this or the VPN switch above, never both.
 class TransparentProxyItem extends ConsumerWidget {
   const TransparentProxyItem({super.key});
 
@@ -106,9 +89,10 @@ class TransparentProxyIpv6Item extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return _vpnToggle(
-      title: (l) => l.transparentProxyIpv6,
+      title: (l) => 'IPv6',
       select: (state) => state.transparentProxyIpv6,
-      update: (state, value) => state.copyWith(transparentProxyIpv6: value),
+      update: (state, value) =>
+          state.copyWith(transparentProxyIpv6: value, ipv6: !value),
     );
   }
 }
@@ -141,32 +125,6 @@ class TUNItem extends ConsumerWidget {
   }
 }
 
-class AllowBypassItem extends ConsumerWidget {
-  const AllowBypassItem({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return _vpnToggle(
-      title: (l) => l.allowBypass,
-      select: (state) => state.allowBypass,
-      update: (state, value) => state.copyWith(allowBypass: value),
-    );
-  }
-}
-
-class VpnSystemProxyItem extends ConsumerWidget {
-  const VpnSystemProxyItem({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return _vpnToggle(
-      title: (l) => l.systemProxy,
-      select: (state) => state.systemProxy,
-      update: (state, value) => state.copyWith(systemProxy: value),
-    );
-  }
-}
-
 class SystemProxyItem extends ConsumerWidget {
   const SystemProxyItem({super.key});
 
@@ -176,45 +134,6 @@ class SystemProxyItem extends ConsumerWidget {
       title: (l) => l.systemProxy,
       select: (state) => state.systemProxy,
       update: (state, value) => state.copyWith(systemProxy: value),
-    );
-  }
-}
-
-class Ipv6Item extends ConsumerWidget {
-  const Ipv6Item({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return _vpnToggle(
-      title: (l) => 'IPv6',
-      select: (state) => state.ipv6,
-      update: (state, value) => state.copyWith(ipv6: value),
-    );
-  }
-}
-
-class AutoSetSystemDnsItem extends ConsumerWidget {
-  const AutoSetSystemDnsItem({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return _networkToggle(
-      title: (l) => l.autoSetSystemDns,
-      select: (state) => state.autoSetSystemDns,
-      update: (state, value) => state.copyWith(autoSetSystemDns: value),
-    );
-  }
-}
-
-class DNSHijackingItem extends ConsumerWidget {
-  const DNSHijackingItem({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return _vpnToggle(
-      title: (l) => l.dnsHijacking,
-      select: (state) => state.dnsHijacking,
-      update: (state, value) => state.copyWith(dnsHijacking: value),
     );
   }
 }
@@ -418,7 +337,6 @@ List<Widget> tunItems({required bool isMipsStack}) {
           (state, value) => state.copyWith.tun(congestionController: value),
         ),
       ),
-    const BypassPrivateRouteItem(),
     const RouteAddressItem(),
     ConfigListEditItem(
       title: (l) => l.routeExcludeAddress,
@@ -473,7 +391,6 @@ class TunSection extends ConsumerWidget {
     return generateAnimatedSection(
       title: appLocalizations.tun,
       items: [
-        const BypassPrivateRouteItem(key: ValueKey(#bypassPrivateRoute)),
         for (final key in listed)
           OverrideEntry(key: ValueKey(key), spec: spec, overrideKey: key),
         if (listed.length < spec.values.length)
@@ -537,7 +454,6 @@ List<Widget> networkOptionsItems({
 }) {
   return [
     if (isDesktop) const TUNItem(),
-    if (isMacOS) const AutoSetSystemDnsItem(),
     const TunStackItem(),
     // mihomo's DefaultSocketHook ignores interface-name on Android
     // (core/lib.go installHooks, vendored dialer.go), so these rows only
@@ -549,37 +465,14 @@ List<Widget> networkOptionsItems({
   ];
 }
 
-class VpnSections extends ConsumerWidget {
+class VpnSections extends StatelessWidget {
   const VpnSections({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final appLocalizations = context.appLocalizations;
-    final authenticationEnable = ref.watch(
-      networkSettingProvider.select((state) => state.authentication.enable),
-    );
     return Column(
       children: [
-        generateSection(
-          items: const [VPNItem()],
-          footer: appLocalizations.vpnEnableDesc,
-        ),
-        generateSection(
-          title: 'VPN',
-          items: const [
-            VpnSystemProxyItem(),
-            BypassDomainItem(),
-            AllowBypassItem(),
-            Ipv6Item(),
-            DNSHijackingItem(),
-          ],
-          footer: [
-            if (authenticationEnable)
-              appLocalizations.authenticationSystemProxyDesc,
-            appLocalizations.bypassDomainDesc,
-            appLocalizations.ipv6InboundDesc,
-          ].join('\n'),
-        ),
         generateSection(
           title: appLocalizations.transparentProxy,
           items: const [

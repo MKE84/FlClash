@@ -65,10 +65,6 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
     );
   }
 
-  void _onSearch(String value) {
-    ref.read(queryProvider(QueryTag.proxies).notifier).value = value;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -112,7 +108,6 @@ class _ProxiesViewState extends ConsumerState<ProxiesView> {
       ],
       menuItems: picker ? const [] : _buildMenuItems(context),
       title: context.appLocalizations.proxies,
-      searchState: AppBarSearchState(onSearch: _onSearch),
       body: switch (proxiesType) {
         ProxiesType.tab => _tabView,
         ProxiesType.list => const ProxiesListView(),

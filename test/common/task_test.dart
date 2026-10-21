@@ -206,10 +206,7 @@ void main() {
       expect(config['allow-lan'], true);
       expect(config['global-ua'], 'FlClash-Test');
       expect(config['profile']['store-selected'], false);
-      expect(
-        config['dns']['nameserver'],
-        containsAll(['1.1.1.1', 'system://']),
-      );
+      expect(config['dns']['nameserver'], ['1.1.1.1']);
       expect(config['hosts']['router.local'], ['192.168.1.1', '192.168.1.2']);
       expect(config['sniffer']['sniff']['HTTP']['ports'], ['80', '443']);
       expect(

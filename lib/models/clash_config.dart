@@ -96,6 +96,15 @@ int _redirectDnsPort(PatchClashConfig config) {
   return _listenPortOf(redirectDnsListen);
 }
 
+/// The redir listener exists only for the root redirect. mihomo always tries a
+/// UDP half beside it, and that half needs CAP_NET_ADMIN, so on Android it
+/// fails and the shared error is logged as `Start Redir server error` on every
+/// start. A run that does not redirect therefore keeps the port closed.
+PatchClashConfig appliedPorts(
+  PatchClashConfig config, {
+  required bool redirecting,
+}) => redirecting ? redirectingPorts(config) : config.copyWith(redirPort: 0);
+
 PatchClashConfig redirectingPorts(PatchClashConfig config) {
   final needsDns = !_isLoopbackListen(config.dns.listen);
   return config.copyWith(

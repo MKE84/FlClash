@@ -39,7 +39,6 @@ Widget _closeButtonIcon(BuildContext context) =>
 final _appThemes = <Brightness, ({Object inputs, ThemeData theme})>{};
 
 ThemeData watchAppTheme(WidgetRef ref, Brightness brightness) {
-  final locale = ref.watch(appSettingProvider.select((state) => state.locale));
   final themeSetting = ref.watch(
     themeSettingProvider.select(
       (state) => (fontFamily: state.fontFamily, pureBlack: state.pureBlack),
@@ -49,10 +48,7 @@ ThemeData watchAppTheme(WidgetRef ref, Brightness brightness) {
   final plainDark = brightness == Brightness.dark && themeSetting.pureBlack
       ? ref.watch(genColorSchemeProvider(brightness, pureBlack: false))
       : null;
-  final locales = [
-    ?getLocaleForString(locale),
-    ...WidgetsBinding.instance.platformDispatcher.locales,
-  ];
+  final locales = [const Locale('zh', 'CN')];
   final inputs = (
     platform: defaultTargetPlatform,
     themeSetting: themeSetting,

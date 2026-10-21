@@ -1,7 +1,6 @@
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/ui.dart';
-import 'package:fl_clash/views/config/dns.dart';
 import 'package:fl_clash/views/config/network.dart';
 import 'package:fl_clash/views/config/scripts.dart';
 import 'package:material_ui/material_ui.dart';
@@ -22,11 +21,6 @@ class AdvancedConfigView extends StatelessWidget {
           title: appLocalizations.network,
           body: const NetworkListView(),
         ),
-      ),
-      ListItem.open(
-        title: const Text('DNS'),
-        leading: const GlyphIcon(AppGlyphs.dns),
-        widget: const DnsView(),
       ),
       ListItem.open(
         title: Text(appLocalizations.addedRules),

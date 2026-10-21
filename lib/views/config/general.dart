@@ -4,7 +4,6 @@ import 'package:fl_clash/features/form/form.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
-import 'package:fl_clash/views/config/on_demand.dart';
 import 'package:fl_clash/views/config/user_agents.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:material_ui/material_ui.dart';
@@ -270,15 +269,6 @@ class GeneralView extends ConsumerWidget {
         ),
       ],
       _appSettingToggle(
-        title: (l) => l.autoRun,
-        select: (state) => state.autoRun,
-        update: (state, value) => state.copyWith(autoRun: value),
-      ),
-      ListItem.open(
-        title: Text(appLocalizations.onDemand),
-        widget: const OnDemandView(),
-      ),
-      _appSettingToggle(
         title: (l) => l.minimizeOnExit,
         select: (state) => state.minimizeOnExit,
         update: (state, value) => state.copyWith(minimizeOnExit: value),
@@ -295,38 +285,6 @@ class GeneralView extends ConsumerWidget {
           update: (state, value) =>
               state.copyWith(showNotificationStopAction: value),
         ),
-      ],
-    ];
-  }
-
-  List<Widget> _inboundItems({
-    required bool authentication,
-    required bool externalController,
-  }) {
-    return [
-      const PortItem(),
-      _clashToggle(
-        title: (l) => l.allowLan,
-        select: (state) => state.allowLan,
-        update: (state, value) => state.copyWith(allowLan: value),
-      ),
-      _clashToggle(
-        title: (l) => l.externalController,
-        select: (state) =>
-            state.externalController == ExternalControllerStatus.open,
-        update: (state, value) => state
-            .copyWith(
-              externalController: value
-                  ? ExternalControllerStatus.open
-                  : ExternalControllerStatus.close,
-            )
-            .ensureControllerSecret(),
-      ),
-      if (externalController) const ExternalControllerSecretItem(),
-      const AuthenticationItem(),
-      if (authentication) ...const [
-        AuthenticationAccountItem(),
-        AuthenticationPasswordItem(),
       ],
     ];
   }
@@ -382,21 +340,7 @@ class GeneralView extends ConsumerWidget {
 
   List<Widget> _coreItems() {
     return [
-      _clashToggle(
-        title: (l) => 'IPv6',
-        select: (state) => state.ipv6,
-        update: (state, value) => state.copyWith(ipv6: value),
-      ),
       const HostsItem(),
-      ConfigToggleItem(
-        title: (l) => l.appendSystemDns,
-        selector: networkSettingProvider.select(
-          (state) => state.appendSystemDns,
-        ),
-        onChanged: (ref, value) => ref
-            .read(networkSettingProvider.notifier)
-            .update((state) => state.copyWith(appendSystemDns: value)),
-      ),
       _clashToggle(
         title: (l) => l.geodataLoader,
         select: (state) => state.geodataLoader == GeodataLoader.memconservative,
@@ -423,14 +367,6 @@ class GeneralView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final appLocalizations = context.appLocalizations;
-    final authentication = ref.watch(
-      networkSettingProvider.select((state) => state.authentication.enable),
-    );
-    final externalController = ref.watch(
-      patchClashConfigProvider.select(
-        (state) => state.externalController == ExternalControllerStatus.open,
-      ),
-    );
     return BaseScaffold(
       title: appLocalizations.general,
       body: ListView(
@@ -441,27 +377,12 @@ class GeneralView extends ConsumerWidget {
           generateSection(
             title: appLocalizations.startupAndBackground,
             items: _startupItems(appLocalizations),
-            footer: [
-              if (system.isDesktop) appLocalizations.silentLaunchDesc,
-              appLocalizations.autoRunDesc,
-              appLocalizations.onDemandDesc,
-            ].join('\n'),
+            footer: system.isDesktop ? appLocalizations.silentLaunchDesc : null,
           ),
           generateSection(
             title: appLocalizations.requestsAndUpdates,
             items: _requestItems(),
             footer: appLocalizations.checkCertificateDesc,
-          ),
-          generateSection(
-            title: appLocalizations.inbound,
-            items: _inboundItems(
-              authentication: authentication,
-              externalController: externalController,
-            ),
-            footer: [
-              appLocalizations.externalControllerDesc,
-              appLocalizations.authenticationDesc,
-            ].join('\n'),
           ),
           generateSection(
             title: appLocalizations.connection,
