@@ -218,6 +218,12 @@ Future<RealProfile> _makeRealProfileTask(MakeRealProfileState data) async {
     ...realPatchConfig.tun.coreJson,
     'auto-detect-interface': true,
   };
+  if (data.bypassPrivateRoute) {
+    tun['route-exclude-address'] = [
+      if (tun['route-exclude-address'] case final List routes) ...routes,
+      ...privateRouteAddress,
+    ];
+  }
   rawConfig['tun'] = tun;
   rawConfig['geodata-loader'] = realPatchConfig.geodataLoader.name;
   rawConfig['geo-auto-update'] = realPatchConfig.geoAutoUpdate;

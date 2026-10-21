@@ -80,6 +80,10 @@ class _ToolViewState extends ConsumerState<ToolsView> {
       _getOtherList(developerMode),
     ];
     return CommonScaffold(
+      // A root page keeps no title; the bar floats and an empty titleWidget
+      // honours the scaffold's "a title must exist" contract while showing
+      // nothing, matching the dashboard.
+      titleWidget: const SizedBox.shrink(),
       body: Builder(
         builder: (context) => ListView.builder(
           key: toolsStoreKey,
