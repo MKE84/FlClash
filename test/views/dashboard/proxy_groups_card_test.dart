@@ -309,17 +309,14 @@ void main() {
     expect(container.read(query), 'HK');
   });
 
-  for (final (type, desktop, searching, mobile) in [
-    (ProxiesType.list, ['Close', 'Search'], ['Clear search'], ['Close']),
-    (
-      ProxiesType.tab,
-      ['Search', 'Delay test', 'Close'],
-      ['Clear search', 'Delay test'],
-      ['Delay test', 'Close'],
-    ),
+  // Round four dropped the proxies page search, so the sheet bar carries only
+  // the delay test beside close and offers no search field on any layout.
+  for (final (type, desktop, mobile) in [
+    (ProxiesType.list, ['Close'], ['Close']),
+    (ProxiesType.tab, ['Delay test', 'Close'], ['Delay test', 'Close']),
   ]) {
-    testWidgets('the sheet bar of the ${type.name} layout keeps search and '
-        'the delay test beside close', (tester) async {
+    testWidgets('the sheet bar of the ${type.name} layout keeps the delay test '
+        'beside close', (tester) async {
       container
           .read(proxiesStyleSettingProvider.notifier)
           .update((state) => state.copyWith(type: type));
@@ -336,11 +333,7 @@ void main() {
       await tester.tap(name('Auto').first);
       await tester.pumpAndSettle();
       expect(barButtons(), unorderedEquals(desktop));
-      await tester.tap(inSheet(find.byTooltip('Search')));
-      await tester.pumpAndSettle();
-      expect(barButtons(), unorderedEquals(searching));
-      await tester.tap(inSheet(find.byTooltip('Back')));
-      await tester.pumpAndSettle();
+      expect(inSheet(find.byType(SearchField)), findsNothing);
 
       Navigator.of(tester.element(find.byType(ProxiesView))).pop();
       await tester.pumpAndSettle();
@@ -351,8 +344,8 @@ void main() {
       );
       await tester.tap(find.byType(ProxyGroupsSummaryCard));
       await tester.pumpAndSettle();
-      expect(barButtons(), mobile);
-      expect(inSheet(find.byType(SearchField)), findsOneWidget);
+      expect(barButtons(), unorderedEquals(mobile));
+      expect(inSheet(find.byType(SearchField)), findsNothing);
     });
   }
 

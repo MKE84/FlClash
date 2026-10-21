@@ -62,7 +62,9 @@ void main() {
   }
 
   Future<void> edit(WidgetTester tester) async {
-    await tester.tap(find.byTooltip('Edit dashboard'));
+    // Round four removed the dashboard's edit action; a long press on the
+    // page enters editing, as it does on the round start button.
+    await tester.longPress(find.byType(DashboardView));
     await settle(tester);
   }
 
@@ -335,7 +337,14 @@ void main() {
 
     expect(find.byType(DashboardEditor), findsNothing);
     expect(find.byTooltip('Remove Network speed'), findsNothing);
-    expect(find.byTooltip('Edit dashboard'), findsOneWidget);
+    // Done leaves the dashboard editable again; the entry is a long press on
+    // the page now, not a visible button.
+    await tester.longPress(find.byType(DashboardView));
+    await settle(tester);
+    expect(find.byType(DashboardEditor), findsOneWidget);
+    await tester.tap(find.byTooltip('Done'));
+    await tester.pump();
+    expect(find.byType(DashboardEditor), findsNothing);
     expect(position.pixels, offset);
     expect(
       tester.state(find.byType(MemoryInfo, skipOffstage: false)),
@@ -444,7 +453,9 @@ void main() {
     expect(find.byType(DashboardEditor), findsNothing);
     await resize(const Size(412, 1400));
     expect(find.byType(DashboardEditor), findsNothing);
-    expect(find.byTooltip('Edit dashboard'), findsOneWidget);
+    // Editing stays off after the round trip; it only re-enters on a long
+    // press, which has no tooltip to assert.
+    expect(find.byTooltip('Edit dashboard'), findsNothing);
 
     await teardown(tester);
   });

@@ -148,7 +148,7 @@ void main() {
   );
 
   test('service status is registered as a dashboard card', () {
-    expect(DashboardWidget.serviceStatus.card, isA<ServiceStatusCard>());
+    expect(DashboardWidget.serviceStatus.card(), isA<ServiceStatusCard>());
   });
 
   testWidgets('holds the latency with a skeleton until checked', (

@@ -331,7 +331,8 @@ void main() {
     container
         .read(networkSettingProvider.notifier)
         .update(
-          (state) => state.copyWith(appendSystemDns: !state.appendSystemDns),
+          (state) =>
+              state.copyWith(bypassPrivateRoute: !state.bypassPrivateRoute),
         );
     await tester.pump();
 

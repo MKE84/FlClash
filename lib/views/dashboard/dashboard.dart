@@ -76,30 +76,37 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
             )
           : null,
       iconActions: const [],
-      // The providers learn a resize a frame late, too late for the cards.
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final room = constraints.biggest / scale;
-          final layout = DashboardDensity.of(room);
-          return DashboardDensityScope(
-            density: layout,
-            scale: scale,
-            child: layout.isDesktop
-                ? _DesktopDashboard(
-                    platform: platform,
-                    columns: dashboardColumnsOf(room.width),
-                    gap: gap,
-                  )
-                : _MobileDashboard(
-                    platform: platform,
-                    gap: gap,
-                    editing: editing,
-                    cardKeyOf: _cardKeyOf,
-                    onEdit: () => _setEditing(true),
-                    onDone: () => _setEditing(false),
-                  ),
-          );
-        },
+      // The cards sway for as long as they are edited, so nothing settles.
+      // A long press anywhere on a phone's dashboard opens editing: the round
+      // start button is the advertised handle, but that card can be removed
+      // from the dashboard, and the handle must outlive it.
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onLongPress: editable && !editing ? () => _setEditing(true) : null,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final room = constraints.biggest / scale;
+            final layout = DashboardDensity.of(room);
+            return DashboardDensityScope(
+              density: layout,
+              scale: scale,
+              child: layout.isDesktop
+                  ? _DesktopDashboard(
+                      platform: platform,
+                      columns: dashboardColumnsOf(room.width),
+                      gap: gap,
+                    )
+                  : _MobileDashboard(
+                      platform: platform,
+                      gap: gap,
+                      editing: editing,
+                      cardKeyOf: _cardKeyOf,
+                      onEdit: () => _setEditing(true),
+                      onDone: () => _setEditing(false),
+                    ),
+            );
+          },
+        ),
       ),
     );
   }

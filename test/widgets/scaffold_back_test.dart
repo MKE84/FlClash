@@ -285,7 +285,8 @@ void main() {
     );
     await tester.pump();
 
-    await tester.tap(find.byTooltip('Edit dashboard'));
+    // The dashboard's only edit entry is a long press on the page itself.
+    await tester.longPress(find.byType(DashboardView));
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.byType(DashboardEditor), findsOneWidget);
 
@@ -294,7 +295,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.byType(DashboardEditor), findsNothing);
-    expect(find.byTooltip('Edit dashboard'), findsOneWidget);
+    // The edit entry is a long press with no visible button to assert.
   });
 
   testWidgets('inactive page scope exits access search layer', (tester) async {
@@ -349,7 +350,8 @@ void main() {
     );
     await tester.pump();
 
-    await tester.tap(find.byTooltip('Edit dashboard'));
+    // The dashboard's only edit entry is a long press on the page itself.
+    await tester.longPress(find.byType(DashboardView));
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.byType(DashboardEditor), findsOneWidget);
 
@@ -358,7 +360,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.byType(DashboardEditor), findsNothing);
-    expect(find.byTooltip('Edit dashboard'), findsOneWidget);
+    // The edit entry is a long press with no visible button to assert.
   });
 
   testWidgets('system back keeps a card removed in edit mode', (tester) async {
@@ -392,7 +394,7 @@ void main() {
     );
     await tester.pump();
 
-    await tester.tap(find.byTooltip('Edit dashboard'));
+    await tester.longPress(find.byType(DashboardView));
     await tester.pump(const Duration(milliseconds: 500));
 
     await tester.tap(find.byTooltip('Remove Network speed'));
