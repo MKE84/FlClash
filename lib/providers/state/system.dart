@@ -276,8 +276,7 @@ Future<VpnOptions> vpnOptions(Ref ref) async {
     congestionController: tun.congestionController,
     transparentProxy: transparentProxy,
     transparentProxyDns: transparentProxyDns,
-    transparentProxyIpv6:
-        transparentProxy && vpnSetting.transparentProxyIpv6,
+    transparentProxyIpv6: transparentProxy && vpnSetting.transparentProxyIpv6,
     // One switch drives every IPv6 path: blocking it also turns the core's
     // own IPv6 off, so nothing keeps resolving AAAA beside the block.
     ipv6: transparentProxy ? !vpnSetting.transparentProxyIpv6 : vpnSetting.ipv6,
