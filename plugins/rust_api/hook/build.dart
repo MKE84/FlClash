@@ -18,6 +18,11 @@ void main(List<String> args) async {
 
 // rquickjs runs bindgen on Android, which must load the NDK's libclang; Linux
 // NDKs before r26 keep it under lib64, later ones and every macOS NDK under lib.
+// A host without a clang of its own is handed the NDK's compiler, whose
+// libclang lives under toolchains/llvm/prebuilt of that NDK rather than beside
+// the compiler; the code-assets config carries no NDK path, so the search also
+// starts from the NDK directory (six levels above that compiler:
+// toolchains/llvm/prebuilt/<host>/bin).
 Map<String, String> _bindgenEnvironment(BuildInput input) {
   if (!input.config.buildCodeAssets ||
       input.config.code.targetOS != OS.android) {
@@ -27,21 +32,22 @@ Map<String, String> _bindgenEnvironment(BuildInput input) {
   if (compiler == null) {
     return const {};
   }
-  final llvmRoot = File.fromUri(compiler).parent.parent;
-  // A host without clang of its own reports a compiler in the NDK that carries
-  // none, so fall back to the NDK directory Flutter reported.
-  final ndk = input.config.code.ndk?.path;
-  final candidates = <Directory>[
-    llvmRoot,
-    if (ndk != null) Directory('$ndk/toolchains/llvm/prebuilt'),
-  ];
-  for (final root in candidates) {
-    final found = _libclang(root);
-    if (found != null) return {'LIBCLANG_PATH': found.path};
-  }
+  final file = File.fromUri(compiler);
+  final llvmRoot = file.parent.parent;
+  final found = _libclang(llvmRoot) ?? _libclang(_ancestor(file, 6));
+  if (found != null) return {'LIBCLANG_PATH': found.path};
   throw StateError(
     'No libclang under ${llvmRoot.path} (lib or lib64); the NDK Flutter '
     'passed cannot run bindgen for rquickjs',
+  );
+}
+
+/// The [levels]-th ancestor directory of [file].
+Directory _ancestor(File file, int levels) {
+  final path = file.path.split(Platform.pathSeparator)
+    ..removeLast();
+  return Directory(
+    path.sublist(0, path.length - levels).join(Platform.pathSeparator),
   );
 }
 
