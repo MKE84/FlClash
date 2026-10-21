@@ -238,7 +238,10 @@ Future<VpnOptions> vpnOptions(Ref ref) async {
     patchClashConfigProvider.select(
       (state) => (
         tun: state.tun,
+        port: state.port,
+        socksPort: state.socksPort,
         mixedPort: state.mixedPort,
+        tproxyPort: state.tproxyPort,
         redirPort: state.redirPort,
         dnsListen: state.dns.listen,
       ),
@@ -274,7 +277,16 @@ Future<VpnOptions> vpnOptions(Ref ref) async {
     transparentProxyDns: transparentProxyDns,
     transparentProxyIpv6: transparentProxy && vpnSetting.transparentProxyIpv6,
     redirectPort: transparentProxy
-        ? redirectingRedirPort(clashConfig.redirPort)
+        ? redirectingRedirPort(
+            clashConfig.redirPort,
+            busy: [
+              clashConfig.port,
+              clashConfig.socksPort,
+              clashConfig.mixedPort,
+              clashConfig.tproxyPort,
+              _listenPort(dnsListen),
+            ],
+          )
         : clashConfig.redirPort,
     dnsRedirectPort: transparentProxyDns ? _listenPort(dnsListen) : 0,
   );

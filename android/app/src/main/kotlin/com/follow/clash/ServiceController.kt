@@ -18,7 +18,6 @@ import com.follow.clash.service.models.VpnOptions
 import com.follow.clash.service.transparent.TransparentProxyController
 import com.follow.clash.service.transparent.redirectSelection
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -28,8 +27,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import java.net.InetSocketAddress
-import java.net.Socket
 import kotlin.coroutines.resume
 
 object ServiceController {
@@ -119,7 +116,6 @@ object ServiceController {
         val redirect = options.transparentProxyOptions
         if (redirect.usable) {
             val applied = runCatching {
-                awaitListening(redirect.redirectPort)
                 val selection = redirectSelection(
                     GlobalState.application,
                     options.accessControlProps,
@@ -142,21 +138,6 @@ object ServiceController {
         )
         true
     }
-
-    private suspend fun awaitListening(port: Int, timeoutMillis: Long = 3_000) =
-        withContext(Dispatchers.IO) {
-            val deadline = System.currentTimeMillis() + timeoutMillis
-            while (System.currentTimeMillis() < deadline) {
-                val listening = runCatching {
-                    Socket().use { it.connect(InetSocketAddress("127.0.0.1", port), 200) }
-                }.isSuccess
-                if (listening) {
-                    return@withContext true
-                }
-                delay(50)
-            }
-            false
-        }
 
     suspend fun stop() = lock.withLock {
         tearDownServices()

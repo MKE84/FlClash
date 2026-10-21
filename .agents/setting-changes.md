@@ -122,9 +122,12 @@ That refusal is off by default because it costs a v6-only network its connectivi
 
 A chain outlives the process that wrote it, so a run killed without a stop would leave every covered app talking to a
 closed port. The controller keeps a marker file while rules exist and `FlClashApplication` clears them on the next
-launch; the start path also waits for the redir port to answer before writing rules, because the core binds its
-inbound asynchronously. Both the rules and the teardown travel as one `su -c` script once the prompt is behind us,
-which is one fork instead of one per rule; the fallback to a command at a time is what names the command that failed.
+launch. `Core.startListener` binds the inbounds synchronously, so no start path ever probes a port by connecting to
+it: a connect lands in the redir listener with no original destination, the core then resolves that connection to its
+own listen address and dials the same port again, and every dial becomes another dial — a connection storm. The
+derived redir port also steps over every port the core binds itself in `redirectingRedirPort`, for the same reason.
+Both the rules and the teardown travel as one `su -c` script once the prompt is behind us, which is one fork instead
+of one per rule; the fallback to a command at a time is what names the command that failed.
 
 Its ports belong to the run, not to the settings: `redirectingPorts` in `lib/models/clash_config.dart` fills in a redir
 port and a loopback DNS address for `_effectivePatchConfig` and `vpnOptions` alike, so a mode that is off leaves no

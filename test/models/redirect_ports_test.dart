@@ -29,6 +29,33 @@ void main() {
       }
     });
 
+    test('the redirect never shares a port with another inbound', () {
+      final config = PatchClashConfig(
+        mixedPort: defaultRedirPort,
+        dns: const Dns().copyWith(listen: ''),
+      );
+
+      expect(redirectingPorts(config).redirPort, isNot(defaultRedirPort));
+      expect(
+        redirectingRedirPort(defaultRedirPort, busy: [defaultRedirPort]),
+        defaultRedirPort + 1,
+      );
+      expect(
+        redirectingRedirPort(0, busy: [defaultRedirPort, defaultRedirPort + 1]),
+        defaultRedirPort + 2,
+      );
+      expect(redirectingRedirPort(7893), 7893);
+    });
+
+    test('the redirect also steps over the DNS port it points at', () {
+      const config = PatchClashConfig(redirPort: 1053, dns: Dns(listen: ''));
+
+      final redirecting = redirectingPorts(config);
+
+      expect(redirecting.redirPort, isNot(1053));
+      expect(redirecting.dns.listen, redirectDnsListen);
+    });
+
     test(
       'a loopback DNS address on an unprivileged port stays where it is',
       () {

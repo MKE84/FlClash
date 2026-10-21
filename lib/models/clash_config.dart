@@ -45,8 +45,29 @@ const defaultRedirPort = 7892;
 
 const redirectDnsListen = '127.0.0.1:1053';
 
-int redirectingRedirPort(int redirPort) =>
-    redirPort == 0 ? defaultRedirPort : redirPort;
+const redirectPortMin = 1024;
+
+const redirectPortMax = 65535;
+
+/// A redir listener on another inbound's port makes every client of that port
+/// resolve to the listener itself, which the core dials again: an endless loop.
+int redirectingRedirPort(int redirPort, {Iterable<int> busy = const []}) {
+  final taken = busy.toSet();
+  var port = redirPort == 0 ? defaultRedirPort : redirPort;
+  for (
+    var attempt = 0;
+    taken.contains(port) && attempt <= taken.length;
+    attempt++
+  ) {
+    port = port < redirectPortMax ? port + 1 : redirectPortMin;
+  }
+  return port;
+}
+
+int _listenPortOf(String listen) {
+  final port = Uri.tryParse('tcp://$listen')?.port ?? 0;
+  return port > 0 ? port : 0;
+}
 
 String redirectingDnsListen(String listen) =>
     _isLoopbackListen(listen) ? listen : redirectDnsListen;
@@ -60,10 +81,28 @@ bool _isLoopbackListen(String listen) {
   return host == '127.0.0.1' || host == '::1' || host == 'localhost';
 }
 
+List<int> _inboundPorts(PatchClashConfig config, {required int dnsPort}) => [
+  config.port,
+  config.socksPort,
+  config.mixedPort,
+  config.tproxyPort,
+  if (dnsPort > 0) dnsPort,
+];
+
+int _redirectDnsPort(PatchClashConfig config) {
+  if (_isLoopbackListen(config.dns.listen)) {
+    return _listenPortOf(config.dns.listen);
+  }
+  return _listenPortOf(redirectDnsListen);
+}
+
 PatchClashConfig redirectingPorts(PatchClashConfig config) {
   final needsDns = !_isLoopbackListen(config.dns.listen);
   return config.copyWith(
-    redirPort: redirectingRedirPort(config.redirPort),
+    redirPort: redirectingRedirPort(
+      config.redirPort,
+      busy: _inboundPorts(config, dnsPort: _redirectDnsPort(config)),
+    ),
     dns: needsDns
         ? config.dns.copyWith(enable: true, listen: redirectDnsListen)
         : config.dns,
