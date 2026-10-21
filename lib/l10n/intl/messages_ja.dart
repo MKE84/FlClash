@@ -1539,6 +1539,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "su 経由で iptables ルールを設定し、システムの TCP 通信を redir ポートへ転送します。VPN が使えない端末でもプロキシでき、VpnService を占有しません。root 権限が必要で、ルールは再起動で消えます。UDP（QUIC など）は転送されずそのまま通過します。プロファイルに redir ポートが必要です。",
     ),
     "transparentProxyDns": MessageLookupByLibrary.simpleMessage("DNSをコアへ転送"),
+    "transparentProxyIpv6": MessageLookupByLibrary.simpleMessage(
+      "リダイレクト対象のアプリで IPv6 を拒否",
+    ),
     "transport": MessageLookupByLibrary.simpleMessage("トランスポート"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(

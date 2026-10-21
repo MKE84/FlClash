@@ -6,6 +6,7 @@ data class TransparentProxyOptions(
     val dnsRedirect: Boolean,
     val redirectPort: Int,
     val dnsPort: Int,
+    val ipv6Block: Boolean = false,
 ) {
     val usable: Boolean
         get() = enable && redirectPort in 1..65535
@@ -22,6 +23,7 @@ data class TransparentProxyOptions(
                 dnsRedirect = false,
                 redirectPort = 0,
                 dnsPort = 0,
+                ipv6Block = false,
             )
         }
 }

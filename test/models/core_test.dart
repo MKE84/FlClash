@@ -202,6 +202,58 @@ void main() {
       expect(proxyOnly.effective.redirectPort, 7892);
       expect(proxyOnly.effective.dnsRedirectPort, 1053);
     });
+
+    test('a proxy-only run keeps the apps access control selected', () {
+      const selection = AccessControlProps(
+        enable: true,
+        mode: AccessControlMode.acceptSelected,
+        acceptList: ['com.example.app'],
+        rejectList: ['com.example.other'],
+      );
+      final proxyOnly = options.copyWith(
+        enable: false,
+        transparentProxy: true,
+        redirectPort: 7892,
+        accessControlProps: selection,
+      );
+
+      expect(proxyOnly.effective.accessControlProps.acceptList, [
+        'com.example.app',
+      ]);
+      expect(proxyOnly.effective.accessControlProps.rejectList, isEmpty);
+      expect(
+        proxyOnly
+            .copyWith(transparentProxy: false)
+            .effective
+            .accessControlProps
+            .enable,
+        isFalse,
+      );
+    });
+
+    test('the ipv6 refusal follows the redirect it belongs to', () {
+      final refused = options.copyWith(
+        enable: false,
+        transparentProxy: true,
+        transparentProxyIpv6: true,
+        redirectPort: 7892,
+      );
+      expect(refused.effective.transparentProxyIpv6, isTrue);
+      expect(
+        refused
+            .copyWith(transparentProxy: false)
+            .effective
+            .transparentProxyIpv6,
+        isFalse,
+      );
+      expect(
+        options
+            .copyWith(transparentProxyIpv6: true)
+            .effective
+            .transparentProxyIpv6,
+        isFalse,
+      );
+    });
   });
 
   group('ChangeProxyParams', () {

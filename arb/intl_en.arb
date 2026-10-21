@@ -479,6 +479,7 @@
   "redirPort": "Redir port",
   "transparentProxy": "Root transparent proxy",
   "transparentProxyDns": "Redirect DNS through the core",
+  "transparentProxyIpv6": "Refuse IPv6 for the apps the redirect covers",
   "transparentProxyDesc": "Installs iptables rules through su and points system TCP traffic at the redir port, so a device whose VPN is refused can still be routed, without a VpnService. The rules need root and disappear on reboot. UDP is not redirected: QUIC and other UDP traffic leaves directly. The profile needs a redir port.",
   "tproxyPort": "TProxy port",
   "portTip": "{label} must be between 1024 and 49151",

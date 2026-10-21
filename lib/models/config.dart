@@ -338,6 +338,7 @@ abstract class VpnProps with _$VpnProps {
     @Default(false) bool dnsHijacking,
     @Default(false) bool transparentProxy,
     @Default(true) bool transparentProxyDns,
+    @Default(false) bool transparentProxyIpv6,
     @Default(defaultAccessControlProps) AccessControlProps accessControlProps,
   }) = _VpnProps;
 

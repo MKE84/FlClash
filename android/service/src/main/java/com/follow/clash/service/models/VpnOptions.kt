@@ -30,6 +30,7 @@ data class VpnOptions(
     val transparentProxyDns: Boolean = true,
     val redirectPort: Int = 0,
     val dnsRedirectPort: Int = 0,
+    val transparentProxyIpv6: Boolean = false,
 ) {
     // The four fields above are the shape Flutter writes; the service reads the
     // redirect through one value so a rule is never built from half of it.
@@ -39,6 +40,7 @@ data class VpnOptions(
             dnsRedirect = transparentProxyDns,
             redirectPort = redirectPort,
             dnsPort = dnsRedirectPort,
+            ipv6Block = transparentProxyIpv6,
         )
 }
 

@@ -250,9 +250,10 @@ Future<VpnOptions> vpnOptions(Ref ref) async {
   final tun = clashConfig.tun;
   final transparentProxy = vpnSetting.transparentProxy && !safeMode;
   final transparentProxyDns =
-      transparentProxy &&
-      vpnSetting.transparentProxyDns &&
-      clashConfig.dnsListen.isNotEmpty;
+      transparentProxy && vpnSetting.transparentProxyDns;
+  final dnsListen = transparentProxy
+      ? redirectingDnsListen(clashConfig.dnsListen)
+      : clashConfig.dnsListen;
   return VpnOptions(
     enable: vpnSetting.enable && !safeMode,
     stack: tun.stack.name,
@@ -271,8 +272,11 @@ Future<VpnOptions> vpnOptions(Ref ref) async {
     congestionController: tun.congestionController,
     transparentProxy: transparentProxy,
     transparentProxyDns: transparentProxyDns,
-    redirectPort: clashConfig.redirPort,
-    dnsRedirectPort: _listenPort(clashConfig.dnsListen),
+    transparentProxyIpv6: transparentProxy && vpnSetting.transparentProxyIpv6,
+    redirectPort: transparentProxy
+        ? redirectingRedirPort(clashConfig.redirPort)
+        : clashConfig.redirPort,
+    dnsRedirectPort: transparentProxyDns ? _listenPort(dnsListen) : 0,
   );
 }
 

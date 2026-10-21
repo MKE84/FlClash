@@ -42,4 +42,28 @@ internal object Su {
             }
         }
     }
+
+    fun silent(statements: List<String>) {
+        if (statements.isEmpty()) {
+            return
+        }
+        runCatching { exec(statements.joinToString("; ") + "; true") }
+    }
+
+    fun script(statements: List<String>, ignoreFailure: Boolean = false) {
+        if (statements.isEmpty()) {
+            return
+        }
+        val failure = runCatching {
+            exec(statements.joinToString(" && "))
+        }.exceptionOrNull()
+        when {
+            failure == null -> return
+            ignoreFailure -> execAll(statements, ignoreFailure = true)
+            else -> {
+                GlobalState.log("$LOG_TAG: ${failure.message}")
+                execAll(statements)
+            }
+        }
+    }
 }

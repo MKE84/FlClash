@@ -1240,7 +1240,7 @@ $TunCopyWith<$Res> get tun {
 /// @nodoc
 mixin _$VpnOptions {
 
- bool get enable; int get port; bool get ipv6; bool get dnsHijacking; AccessControlProps get accessControlProps; bool get allowBypass; bool get systemProxy; List<String> get bypassDomain; String get stack; List<String> get routeAddress; int get mtu; String get congestionController; bool get transparentProxy; bool get transparentProxyDns; int get redirectPort; int get dnsRedirectPort;
+ bool get enable; int get port; bool get ipv6; bool get dnsHijacking; AccessControlProps get accessControlProps; bool get allowBypass; bool get systemProxy; List<String> get bypassDomain; String get stack; List<String> get routeAddress; int get mtu; String get congestionController; bool get transparentProxy; bool get transparentProxyDns; int get redirectPort; int get dnsRedirectPort; bool get transparentProxyIpv6;
 /// Create a copy of VpnOptions
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1254,20 +1254,20 @@ $VpnOptionsCopyWith<VpnOptions> get copyWith => _$VpnOptionsCopyWithImpl<VpnOpti
 @override
 bool operator ==(Object other) {
   final _this = this as VpnOptions;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VpnOptions&&(identical(other.enable, _this.enable) || other.enable == _this.enable)&&(identical(other.port, _this.port) || other.port == _this.port)&&(identical(other.ipv6, _this.ipv6) || other.ipv6 == _this.ipv6)&&(identical(other.dnsHijacking, _this.dnsHijacking) || other.dnsHijacking == _this.dnsHijacking)&&(identical(other.accessControlProps, _this.accessControlProps) || other.accessControlProps == _this.accessControlProps)&&(identical(other.allowBypass, _this.allowBypass) || other.allowBypass == _this.allowBypass)&&(identical(other.systemProxy, _this.systemProxy) || other.systemProxy == _this.systemProxy)&&const DeepCollectionEquality().equals(other.bypassDomain, _this.bypassDomain)&&(identical(other.stack, _this.stack) || other.stack == _this.stack)&&const DeepCollectionEquality().equals(other.routeAddress, _this.routeAddress)&&(identical(other.mtu, _this.mtu) || other.mtu == _this.mtu)&&(identical(other.congestionController, _this.congestionController) || other.congestionController == _this.congestionController)&&(identical(other.transparentProxy, _this.transparentProxy) || other.transparentProxy == _this.transparentProxy)&&(identical(other.transparentProxyDns, _this.transparentProxyDns) || other.transparentProxyDns == _this.transparentProxyDns)&&(identical(other.redirectPort, _this.redirectPort) || other.redirectPort == _this.redirectPort)&&(identical(other.dnsRedirectPort, _this.dnsRedirectPort) || other.dnsRedirectPort == _this.dnsRedirectPort));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VpnOptions&&(identical(other.enable, _this.enable) || other.enable == _this.enable)&&(identical(other.port, _this.port) || other.port == _this.port)&&(identical(other.ipv6, _this.ipv6) || other.ipv6 == _this.ipv6)&&(identical(other.dnsHijacking, _this.dnsHijacking) || other.dnsHijacking == _this.dnsHijacking)&&(identical(other.accessControlProps, _this.accessControlProps) || other.accessControlProps == _this.accessControlProps)&&(identical(other.allowBypass, _this.allowBypass) || other.allowBypass == _this.allowBypass)&&(identical(other.systemProxy, _this.systemProxy) || other.systemProxy == _this.systemProxy)&&const DeepCollectionEquality().equals(other.bypassDomain, _this.bypassDomain)&&(identical(other.stack, _this.stack) || other.stack == _this.stack)&&const DeepCollectionEquality().equals(other.routeAddress, _this.routeAddress)&&(identical(other.mtu, _this.mtu) || other.mtu == _this.mtu)&&(identical(other.congestionController, _this.congestionController) || other.congestionController == _this.congestionController)&&(identical(other.transparentProxy, _this.transparentProxy) || other.transparentProxy == _this.transparentProxy)&&(identical(other.transparentProxyDns, _this.transparentProxyDns) || other.transparentProxyDns == _this.transparentProxyDns)&&(identical(other.redirectPort, _this.redirectPort) || other.redirectPort == _this.redirectPort)&&(identical(other.dnsRedirectPort, _this.dnsRedirectPort) || other.dnsRedirectPort == _this.dnsRedirectPort)&&(identical(other.transparentProxyIpv6, _this.transparentProxyIpv6) || other.transparentProxyIpv6 == _this.transparentProxyIpv6));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as VpnOptions;
-  return Object.hash(runtimeType,_this.enable,_this.port,_this.ipv6,_this.dnsHijacking,_this.accessControlProps,_this.allowBypass,_this.systemProxy,const DeepCollectionEquality().hash(_this.bypassDomain),_this.stack,const DeepCollectionEquality().hash(_this.routeAddress),_this.mtu,_this.congestionController,_this.transparentProxy,_this.transparentProxyDns,_this.redirectPort,_this.dnsRedirectPort);
+  return Object.hash(runtimeType,_this.enable,_this.port,_this.ipv6,_this.dnsHijacking,_this.accessControlProps,_this.allowBypass,_this.systemProxy,const DeepCollectionEquality().hash(_this.bypassDomain),_this.stack,const DeepCollectionEquality().hash(_this.routeAddress),_this.mtu,_this.congestionController,_this.transparentProxy,_this.transparentProxyDns,_this.redirectPort,_this.dnsRedirectPort,_this.transparentProxyIpv6);
 }
 
 @override
 String toString() {
   final _this = this as VpnOptions;
-  return 'VpnOptions(enable: ${_this.enable}, port: ${_this.port}, ipv6: ${_this.ipv6}, dnsHijacking: ${_this.dnsHijacking}, accessControlProps: ${_this.accessControlProps}, allowBypass: ${_this.allowBypass}, systemProxy: ${_this.systemProxy}, bypassDomain: ${_this.bypassDomain}, stack: ${_this.stack}, routeAddress: ${_this.routeAddress}, mtu: ${_this.mtu}, congestionController: ${_this.congestionController}, transparentProxy: ${_this.transparentProxy}, transparentProxyDns: ${_this.transparentProxyDns}, redirectPort: ${_this.redirectPort}, dnsRedirectPort: ${_this.dnsRedirectPort})';
+  return 'VpnOptions(enable: ${_this.enable}, port: ${_this.port}, ipv6: ${_this.ipv6}, dnsHijacking: ${_this.dnsHijacking}, accessControlProps: ${_this.accessControlProps}, allowBypass: ${_this.allowBypass}, systemProxy: ${_this.systemProxy}, bypassDomain: ${_this.bypassDomain}, stack: ${_this.stack}, routeAddress: ${_this.routeAddress}, mtu: ${_this.mtu}, congestionController: ${_this.congestionController}, transparentProxy: ${_this.transparentProxy}, transparentProxyDns: ${_this.transparentProxyDns}, redirectPort: ${_this.redirectPort}, dnsRedirectPort: ${_this.dnsRedirectPort}, transparentProxyIpv6: ${_this.transparentProxyIpv6})';
 }
 
 
@@ -1278,7 +1278,7 @@ abstract mixin class $VpnOptionsCopyWith<$Res>  {
   factory $VpnOptionsCopyWith(VpnOptions value, $Res Function(VpnOptions) _then) = _$VpnOptionsCopyWithImpl;
 @useResult
 $Res call({
- bool enable, int port, bool ipv6, bool dnsHijacking, AccessControlProps accessControlProps, bool allowBypass, bool systemProxy, List<String> bypassDomain, String stack, List<String> routeAddress, int mtu, String congestionController, bool transparentProxy, bool transparentProxyDns, int redirectPort, int dnsRedirectPort
+ bool enable, int port, bool ipv6, bool dnsHijacking, AccessControlProps accessControlProps, bool allowBypass, bool systemProxy, List<String> bypassDomain, String stack, List<String> routeAddress, int mtu, String congestionController, bool transparentProxy, bool transparentProxyDns, int redirectPort, int dnsRedirectPort, bool transparentProxyIpv6
 });
 
 
@@ -1295,7 +1295,7 @@ class _$VpnOptionsCopyWithImpl<$Res>
 
 /// Create a copy of VpnOptions
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? enable = null,Object? port = null,Object? ipv6 = null,Object? dnsHijacking = null,Object? accessControlProps = null,Object? allowBypass = null,Object? systemProxy = null,Object? bypassDomain = null,Object? stack = null,Object? routeAddress = null,Object? mtu = null,Object? congestionController = null,Object? transparentProxy = null,Object? transparentProxyDns = null,Object? redirectPort = null,Object? dnsRedirectPort = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enable = null,Object? port = null,Object? ipv6 = null,Object? dnsHijacking = null,Object? accessControlProps = null,Object? allowBypass = null,Object? systemProxy = null,Object? bypassDomain = null,Object? stack = null,Object? routeAddress = null,Object? mtu = null,Object? congestionController = null,Object? transparentProxy = null,Object? transparentProxyDns = null,Object? redirectPort = null,Object? dnsRedirectPort = null,Object? transparentProxyIpv6 = null,}) {
   return _then(VpnOptions(
 enable: null == enable ? _self.enable : enable // ignore: cast_nullable_to_non_nullable
 as bool,port: null == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
@@ -1313,7 +1313,8 @@ as String,transparentProxy: null == transparentProxy ? _self.transparentProxy : 
 as bool,transparentProxyDns: null == transparentProxyDns ? _self.transparentProxyDns : transparentProxyDns // ignore: cast_nullable_to_non_nullable
 as bool,redirectPort: null == redirectPort ? _self.redirectPort : redirectPort // ignore: cast_nullable_to_non_nullable
 as int,dnsRedirectPort: null == dnsRedirectPort ? _self.dnsRedirectPort : dnsRedirectPort // ignore: cast_nullable_to_non_nullable
-as int,
+as int,transparentProxyIpv6: null == transparentProxyIpv6 ? _self.transparentProxyIpv6 : transparentProxyIpv6 // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 /// Create a copy of VpnOptions
@@ -1407,10 +1408,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool enable,  int port,  bool ipv6,  bool dnsHijacking,  AccessControlProps accessControlProps,  bool allowBypass,  bool systemProxy,  List<String> bypassDomain,  String stack,  List<String> routeAddress,  int mtu,  String congestionController,  bool transparentProxy,  bool transparentProxyDns,  int redirectPort,  int dnsRedirectPort)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool enable,  int port,  bool ipv6,  bool dnsHijacking,  AccessControlProps accessControlProps,  bool allowBypass,  bool systemProxy,  List<String> bypassDomain,  String stack,  List<String> routeAddress,  int mtu,  String congestionController,  bool transparentProxy,  bool transparentProxyDns,  int redirectPort,  int dnsRedirectPort,  bool transparentProxyIpv6)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _VpnOptions() when $default != null:
-return $default(_that.enable,_that.port,_that.ipv6,_that.dnsHijacking,_that.accessControlProps,_that.allowBypass,_that.systemProxy,_that.bypassDomain,_that.stack,_that.routeAddress,_that.mtu,_that.congestionController,_that.transparentProxy,_that.transparentProxyDns,_that.redirectPort,_that.dnsRedirectPort);case _:
+return $default(_that.enable,_that.port,_that.ipv6,_that.dnsHijacking,_that.accessControlProps,_that.allowBypass,_that.systemProxy,_that.bypassDomain,_that.stack,_that.routeAddress,_that.mtu,_that.congestionController,_that.transparentProxy,_that.transparentProxyDns,_that.redirectPort,_that.dnsRedirectPort,_that.transparentProxyIpv6);case _:
   return orElse();
 
 }
@@ -1428,10 +1429,10 @@ return $default(_that.enable,_that.port,_that.ipv6,_that.dnsHijacking,_that.acce
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool enable,  int port,  bool ipv6,  bool dnsHijacking,  AccessControlProps accessControlProps,  bool allowBypass,  bool systemProxy,  List<String> bypassDomain,  String stack,  List<String> routeAddress,  int mtu,  String congestionController,  bool transparentProxy,  bool transparentProxyDns,  int redirectPort,  int dnsRedirectPort)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool enable,  int port,  bool ipv6,  bool dnsHijacking,  AccessControlProps accessControlProps,  bool allowBypass,  bool systemProxy,  List<String> bypassDomain,  String stack,  List<String> routeAddress,  int mtu,  String congestionController,  bool transparentProxy,  bool transparentProxyDns,  int redirectPort,  int dnsRedirectPort,  bool transparentProxyIpv6)  $default,) {final _that = this;
 switch (_that) {
 case _VpnOptions():
-return $default(_that.enable,_that.port,_that.ipv6,_that.dnsHijacking,_that.accessControlProps,_that.allowBypass,_that.systemProxy,_that.bypassDomain,_that.stack,_that.routeAddress,_that.mtu,_that.congestionController,_that.transparentProxy,_that.transparentProxyDns,_that.redirectPort,_that.dnsRedirectPort);case _:
+return $default(_that.enable,_that.port,_that.ipv6,_that.dnsHijacking,_that.accessControlProps,_that.allowBypass,_that.systemProxy,_that.bypassDomain,_that.stack,_that.routeAddress,_that.mtu,_that.congestionController,_that.transparentProxy,_that.transparentProxyDns,_that.redirectPort,_that.dnsRedirectPort,_that.transparentProxyIpv6);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1448,10 +1449,10 @@ return $default(_that.enable,_that.port,_that.ipv6,_that.dnsHijacking,_that.acce
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool enable,  int port,  bool ipv6,  bool dnsHijacking,  AccessControlProps accessControlProps,  bool allowBypass,  bool systemProxy,  List<String> bypassDomain,  String stack,  List<String> routeAddress,  int mtu,  String congestionController,  bool transparentProxy,  bool transparentProxyDns,  int redirectPort,  int dnsRedirectPort)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool enable,  int port,  bool ipv6,  bool dnsHijacking,  AccessControlProps accessControlProps,  bool allowBypass,  bool systemProxy,  List<String> bypassDomain,  String stack,  List<String> routeAddress,  int mtu,  String congestionController,  bool transparentProxy,  bool transparentProxyDns,  int redirectPort,  int dnsRedirectPort,  bool transparentProxyIpv6)?  $default,) {final _that = this;
 switch (_that) {
 case _VpnOptions() when $default != null:
-return $default(_that.enable,_that.port,_that.ipv6,_that.dnsHijacking,_that.accessControlProps,_that.allowBypass,_that.systemProxy,_that.bypassDomain,_that.stack,_that.routeAddress,_that.mtu,_that.congestionController,_that.transparentProxy,_that.transparentProxyDns,_that.redirectPort,_that.dnsRedirectPort);case _:
+return $default(_that.enable,_that.port,_that.ipv6,_that.dnsHijacking,_that.accessControlProps,_that.allowBypass,_that.systemProxy,_that.bypassDomain,_that.stack,_that.routeAddress,_that.mtu,_that.congestionController,_that.transparentProxy,_that.transparentProxyDns,_that.redirectPort,_that.dnsRedirectPort,_that.transparentProxyIpv6);case _:
   return null;
 
 }
@@ -1463,7 +1464,7 @@ return $default(_that.enable,_that.port,_that.ipv6,_that.dnsHijacking,_that.acce
 @JsonSerializable()
 
 class _VpnOptions implements VpnOptions {
-  const _VpnOptions({required this.enable, required this.port, required this.ipv6, required this.dnsHijacking, required this.accessControlProps, required this.allowBypass, required this.systemProxy, required  List<String> bypassDomain, required this.stack,  List<String> routeAddress = const [], this.mtu = 0, this.congestionController = '', this.transparentProxy = false, this.transparentProxyDns = true, this.redirectPort = 0, this.dnsRedirectPort = 0}): _bypassDomain = bypassDomain,_routeAddress = routeAddress;
+  const _VpnOptions({required this.enable, required this.port, required this.ipv6, required this.dnsHijacking, required this.accessControlProps, required this.allowBypass, required this.systemProxy, required  List<String> bypassDomain, required this.stack,  List<String> routeAddress = const [], this.mtu = 0, this.congestionController = '', this.transparentProxy = false, this.transparentProxyDns = true, this.redirectPort = 0, this.dnsRedirectPort = 0, this.transparentProxyIpv6 = false}): _bypassDomain = bypassDomain,_routeAddress = routeAddress;
   factory _VpnOptions.fromJson(Map<String, dynamic> json) => _$VpnOptionsFromJson(json);
 
 @override final  bool enable;
@@ -1494,6 +1495,7 @@ class _VpnOptions implements VpnOptions {
 @override@JsonKey() final  bool transparentProxyDns;
 @override@JsonKey() final  int redirectPort;
 @override@JsonKey() final  int dnsRedirectPort;
+@override@JsonKey() final  bool transparentProxyIpv6;
 
 /// Create a copy of VpnOptions
 /// with the given fields replaced by the non-null parameter values.
@@ -1508,18 +1510,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _VpnOptions&&(identical(other.enable, enable) || other.enable == enable)&&(identical(other.port, port) || other.port == port)&&(identical(other.ipv6, ipv6) || other.ipv6 == ipv6)&&(identical(other.dnsHijacking, dnsHijacking) || other.dnsHijacking == dnsHijacking)&&(identical(other.accessControlProps, accessControlProps) || other.accessControlProps == accessControlProps)&&(identical(other.allowBypass, allowBypass) || other.allowBypass == allowBypass)&&(identical(other.systemProxy, systemProxy) || other.systemProxy == systemProxy)&&const DeepCollectionEquality().equals(other.bypassDomain, _bypassDomain)&&(identical(other.stack, stack) || other.stack == stack)&&const DeepCollectionEquality().equals(other.routeAddress, _routeAddress)&&(identical(other.mtu, mtu) || other.mtu == mtu)&&(identical(other.congestionController, congestionController) || other.congestionController == congestionController)&&(identical(other.transparentProxy, transparentProxy) || other.transparentProxy == transparentProxy)&&(identical(other.transparentProxyDns, transparentProxyDns) || other.transparentProxyDns == transparentProxyDns)&&(identical(other.redirectPort, redirectPort) || other.redirectPort == redirectPort)&&(identical(other.dnsRedirectPort, dnsRedirectPort) || other.dnsRedirectPort == dnsRedirectPort));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _VpnOptions&&(identical(other.enable, enable) || other.enable == enable)&&(identical(other.port, port) || other.port == port)&&(identical(other.ipv6, ipv6) || other.ipv6 == ipv6)&&(identical(other.dnsHijacking, dnsHijacking) || other.dnsHijacking == dnsHijacking)&&(identical(other.accessControlProps, accessControlProps) || other.accessControlProps == accessControlProps)&&(identical(other.allowBypass, allowBypass) || other.allowBypass == allowBypass)&&(identical(other.systemProxy, systemProxy) || other.systemProxy == systemProxy)&&const DeepCollectionEquality().equals(other.bypassDomain, _bypassDomain)&&(identical(other.stack, stack) || other.stack == stack)&&const DeepCollectionEquality().equals(other.routeAddress, _routeAddress)&&(identical(other.mtu, mtu) || other.mtu == mtu)&&(identical(other.congestionController, congestionController) || other.congestionController == congestionController)&&(identical(other.transparentProxy, transparentProxy) || other.transparentProxy == transparentProxy)&&(identical(other.transparentProxyDns, transparentProxyDns) || other.transparentProxyDns == transparentProxyDns)&&(identical(other.redirectPort, redirectPort) || other.redirectPort == redirectPort)&&(identical(other.dnsRedirectPort, dnsRedirectPort) || other.dnsRedirectPort == dnsRedirectPort)&&(identical(other.transparentProxyIpv6, transparentProxyIpv6) || other.transparentProxyIpv6 == transparentProxyIpv6));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,enable,port,ipv6,dnsHijacking,accessControlProps,allowBypass,systemProxy,const DeepCollectionEquality().hash(_bypassDomain),stack,const DeepCollectionEquality().hash(_routeAddress),mtu,congestionController,transparentProxy,transparentProxyDns,redirectPort,dnsRedirectPort);
+    return Object.hash(runtimeType,enable,port,ipv6,dnsHijacking,accessControlProps,allowBypass,systemProxy,const DeepCollectionEquality().hash(_bypassDomain),stack,const DeepCollectionEquality().hash(_routeAddress),mtu,congestionController,transparentProxy,transparentProxyDns,redirectPort,dnsRedirectPort,transparentProxyIpv6);
 }
 
 @override
 String toString() {
-    return 'VpnOptions(enable: $enable, port: $port, ipv6: $ipv6, dnsHijacking: $dnsHijacking, accessControlProps: $accessControlProps, allowBypass: $allowBypass, systemProxy: $systemProxy, bypassDomain: $bypassDomain, stack: $stack, routeAddress: $routeAddress, mtu: $mtu, congestionController: $congestionController, transparentProxy: $transparentProxy, transparentProxyDns: $transparentProxyDns, redirectPort: $redirectPort, dnsRedirectPort: $dnsRedirectPort)';
+    return 'VpnOptions(enable: $enable, port: $port, ipv6: $ipv6, dnsHijacking: $dnsHijacking, accessControlProps: $accessControlProps, allowBypass: $allowBypass, systemProxy: $systemProxy, bypassDomain: $bypassDomain, stack: $stack, routeAddress: $routeAddress, mtu: $mtu, congestionController: $congestionController, transparentProxy: $transparentProxy, transparentProxyDns: $transparentProxyDns, redirectPort: $redirectPort, dnsRedirectPort: $dnsRedirectPort, transparentProxyIpv6: $transparentProxyIpv6)';
 }
 
 
@@ -1530,7 +1532,7 @@ abstract mixin class _$VpnOptionsCopyWith<$Res> implements $VpnOptionsCopyWith<$
   factory _$VpnOptionsCopyWith(_VpnOptions value, $Res Function(_VpnOptions) _then) = __$VpnOptionsCopyWithImpl;
 @override @useResult
 $Res call({
- bool enable, int port, bool ipv6, bool dnsHijacking, AccessControlProps accessControlProps, bool allowBypass, bool systemProxy, List<String> bypassDomain, String stack, List<String> routeAddress, int mtu, String congestionController, bool transparentProxy, bool transparentProxyDns, int redirectPort, int dnsRedirectPort
+ bool enable, int port, bool ipv6, bool dnsHijacking, AccessControlProps accessControlProps, bool allowBypass, bool systemProxy, List<String> bypassDomain, String stack, List<String> routeAddress, int mtu, String congestionController, bool transparentProxy, bool transparentProxyDns, int redirectPort, int dnsRedirectPort, bool transparentProxyIpv6
 });
 
 
@@ -1547,7 +1549,7 @@ class __$VpnOptionsCopyWithImpl<$Res>
 
 /// Create a copy of VpnOptions
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enable = null,Object? port = null,Object? ipv6 = null,Object? dnsHijacking = null,Object? accessControlProps = null,Object? allowBypass = null,Object? systemProxy = null,Object? bypassDomain = null,Object? stack = null,Object? routeAddress = null,Object? mtu = null,Object? congestionController = null,Object? transparentProxy = null,Object? transparentProxyDns = null,Object? redirectPort = null,Object? dnsRedirectPort = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enable = null,Object? port = null,Object? ipv6 = null,Object? dnsHijacking = null,Object? accessControlProps = null,Object? allowBypass = null,Object? systemProxy = null,Object? bypassDomain = null,Object? stack = null,Object? routeAddress = null,Object? mtu = null,Object? congestionController = null,Object? transparentProxy = null,Object? transparentProxyDns = null,Object? redirectPort = null,Object? dnsRedirectPort = null,Object? transparentProxyIpv6 = null,}) {
   return _then(_VpnOptions(
 enable: null == enable ? _self.enable : enable // ignore: cast_nullable_to_non_nullable
 as bool,port: null == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
@@ -1565,7 +1567,8 @@ as String,transparentProxy: null == transparentProxy ? _self.transparentProxy : 
 as bool,transparentProxyDns: null == transparentProxyDns ? _self.transparentProxyDns : transparentProxyDns // ignore: cast_nullable_to_non_nullable
 as bool,redirectPort: null == redirectPort ? _self.redirectPort : redirectPort // ignore: cast_nullable_to_non_nullable
 as int,dnsRedirectPort: null == dnsRedirectPort ? _self.dnsRedirectPort : dnsRedirectPort // ignore: cast_nullable_to_non_nullable
-as int,
+as int,transparentProxyIpv6: null == transparentProxyIpv6 ? _self.transparentProxyIpv6 : transparentProxyIpv6 // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

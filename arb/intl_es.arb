@@ -479,6 +479,7 @@
   "redirPort": "Puerto Redir",
   "transparentProxy": "Proxy transparente root",
   "transparentProxyDns": "Redirigir DNS al núcleo",
+  "transparentProxyIpv6": "Rechazar IPv6 para las aplicaciones redirigidas",
   "transparentProxyDesc": "Instala reglas de iptables con su y dirige el tráfico TCP del sistema al puerto redir, para un dispositivo al que se le niega el VPN, sin ocupar un VpnService. Requiere root y las reglas desaparecen al reiniciar. El UDP (QUIC y el resto) no se redirige. El perfil necesita un puerto redir.",
   "tproxyPort": "Puerto TProxy",
   "portTip": "{label} debe estar entre 1024 y 49151",

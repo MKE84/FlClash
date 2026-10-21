@@ -1261,7 +1261,7 @@ as double?,
 /// @nodoc
 mixin _$VpnProps {
 
- bool get enable; bool get systemProxy; bool get ipv6; bool get allowBypass; bool get dnsHijacking; bool get transparentProxy; bool get transparentProxyDns; AccessControlProps get accessControlProps;
+ bool get enable; bool get systemProxy; bool get ipv6; bool get allowBypass; bool get dnsHijacking; bool get transparentProxy; bool get transparentProxyDns; bool get transparentProxyIpv6; AccessControlProps get accessControlProps;
 /// Create a copy of VpnProps
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1275,20 +1275,20 @@ $VpnPropsCopyWith<VpnProps> get copyWith => _$VpnPropsCopyWithImpl<VpnProps>(thi
 @override
 bool operator ==(Object other) {
   final _this = this as VpnProps;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VpnProps&&(identical(other.enable, _this.enable) || other.enable == _this.enable)&&(identical(other.systemProxy, _this.systemProxy) || other.systemProxy == _this.systemProxy)&&(identical(other.ipv6, _this.ipv6) || other.ipv6 == _this.ipv6)&&(identical(other.allowBypass, _this.allowBypass) || other.allowBypass == _this.allowBypass)&&(identical(other.dnsHijacking, _this.dnsHijacking) || other.dnsHijacking == _this.dnsHijacking)&&(identical(other.transparentProxy, _this.transparentProxy) || other.transparentProxy == _this.transparentProxy)&&(identical(other.transparentProxyDns, _this.transparentProxyDns) || other.transparentProxyDns == _this.transparentProxyDns)&&(identical(other.accessControlProps, _this.accessControlProps) || other.accessControlProps == _this.accessControlProps));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VpnProps&&(identical(other.enable, _this.enable) || other.enable == _this.enable)&&(identical(other.systemProxy, _this.systemProxy) || other.systemProxy == _this.systemProxy)&&(identical(other.ipv6, _this.ipv6) || other.ipv6 == _this.ipv6)&&(identical(other.allowBypass, _this.allowBypass) || other.allowBypass == _this.allowBypass)&&(identical(other.dnsHijacking, _this.dnsHijacking) || other.dnsHijacking == _this.dnsHijacking)&&(identical(other.transparentProxy, _this.transparentProxy) || other.transparentProxy == _this.transparentProxy)&&(identical(other.transparentProxyDns, _this.transparentProxyDns) || other.transparentProxyDns == _this.transparentProxyDns)&&(identical(other.transparentProxyIpv6, _this.transparentProxyIpv6) || other.transparentProxyIpv6 == _this.transparentProxyIpv6)&&(identical(other.accessControlProps, _this.accessControlProps) || other.accessControlProps == _this.accessControlProps));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as VpnProps;
-  return Object.hash(runtimeType,_this.enable,_this.systemProxy,_this.ipv6,_this.allowBypass,_this.dnsHijacking,_this.transparentProxy,_this.transparentProxyDns,_this.accessControlProps);
+  return Object.hash(runtimeType,_this.enable,_this.systemProxy,_this.ipv6,_this.allowBypass,_this.dnsHijacking,_this.transparentProxy,_this.transparentProxyDns,_this.transparentProxyIpv6,_this.accessControlProps);
 }
 
 @override
 String toString() {
   final _this = this as VpnProps;
-  return 'VpnProps(enable: ${_this.enable}, systemProxy: ${_this.systemProxy}, ipv6: ${_this.ipv6}, allowBypass: ${_this.allowBypass}, dnsHijacking: ${_this.dnsHijacking}, transparentProxy: ${_this.transparentProxy}, transparentProxyDns: ${_this.transparentProxyDns}, accessControlProps: ${_this.accessControlProps})';
+  return 'VpnProps(enable: ${_this.enable}, systemProxy: ${_this.systemProxy}, ipv6: ${_this.ipv6}, allowBypass: ${_this.allowBypass}, dnsHijacking: ${_this.dnsHijacking}, transparentProxy: ${_this.transparentProxy}, transparentProxyDns: ${_this.transparentProxyDns}, transparentProxyIpv6: ${_this.transparentProxyIpv6}, accessControlProps: ${_this.accessControlProps})';
 }
 
 
@@ -1299,7 +1299,7 @@ abstract mixin class $VpnPropsCopyWith<$Res>  {
   factory $VpnPropsCopyWith(VpnProps value, $Res Function(VpnProps) _then) = _$VpnPropsCopyWithImpl;
 @useResult
 $Res call({
- bool enable, bool systemProxy, bool ipv6, bool allowBypass, bool dnsHijacking, bool transparentProxy, bool transparentProxyDns, AccessControlProps accessControlProps
+ bool enable, bool systemProxy, bool ipv6, bool allowBypass, bool dnsHijacking, bool transparentProxy, bool transparentProxyDns, bool transparentProxyIpv6, AccessControlProps accessControlProps
 });
 
 
@@ -1316,7 +1316,7 @@ class _$VpnPropsCopyWithImpl<$Res>
 
 /// Create a copy of VpnProps
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? enable = null,Object? systemProxy = null,Object? ipv6 = null,Object? allowBypass = null,Object? dnsHijacking = null,Object? transparentProxy = null,Object? transparentProxyDns = null,Object? accessControlProps = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? enable = null,Object? systemProxy = null,Object? ipv6 = null,Object? allowBypass = null,Object? dnsHijacking = null,Object? transparentProxy = null,Object? transparentProxyDns = null,Object? transparentProxyIpv6 = null,Object? accessControlProps = null,}) {
   return _then(VpnProps(
 enable: null == enable ? _self.enable : enable // ignore: cast_nullable_to_non_nullable
 as bool,systemProxy: null == systemProxy ? _self.systemProxy : systemProxy // ignore: cast_nullable_to_non_nullable
@@ -1325,6 +1325,7 @@ as bool,allowBypass: null == allowBypass ? _self.allowBypass : allowBypass // ig
 as bool,dnsHijacking: null == dnsHijacking ? _self.dnsHijacking : dnsHijacking // ignore: cast_nullable_to_non_nullable
 as bool,transparentProxy: null == transparentProxy ? _self.transparentProxy : transparentProxy // ignore: cast_nullable_to_non_nullable
 as bool,transparentProxyDns: null == transparentProxyDns ? _self.transparentProxyDns : transparentProxyDns // ignore: cast_nullable_to_non_nullable
+as bool,transparentProxyIpv6: null == transparentProxyIpv6 ? _self.transparentProxyIpv6 : transparentProxyIpv6 // ignore: cast_nullable_to_non_nullable
 as bool,accessControlProps: null == accessControlProps ? _self.accessControlProps : accessControlProps // ignore: cast_nullable_to_non_nullable
 as AccessControlProps,
   ));
@@ -1420,10 +1421,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool enable,  bool systemProxy,  bool ipv6,  bool allowBypass,  bool dnsHijacking,  bool transparentProxy,  bool transparentProxyDns,  AccessControlProps accessControlProps)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool enable,  bool systemProxy,  bool ipv6,  bool allowBypass,  bool dnsHijacking,  bool transparentProxy,  bool transparentProxyDns,  bool transparentProxyIpv6,  AccessControlProps accessControlProps)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _VpnProps() when $default != null:
-return $default(_that.enable,_that.systemProxy,_that.ipv6,_that.allowBypass,_that.dnsHijacking,_that.transparentProxy,_that.transparentProxyDns,_that.accessControlProps);case _:
+return $default(_that.enable,_that.systemProxy,_that.ipv6,_that.allowBypass,_that.dnsHijacking,_that.transparentProxy,_that.transparentProxyDns,_that.transparentProxyIpv6,_that.accessControlProps);case _:
   return orElse();
 
 }
@@ -1441,10 +1442,10 @@ return $default(_that.enable,_that.systemProxy,_that.ipv6,_that.allowBypass,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool enable,  bool systemProxy,  bool ipv6,  bool allowBypass,  bool dnsHijacking,  bool transparentProxy,  bool transparentProxyDns,  AccessControlProps accessControlProps)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool enable,  bool systemProxy,  bool ipv6,  bool allowBypass,  bool dnsHijacking,  bool transparentProxy,  bool transparentProxyDns,  bool transparentProxyIpv6,  AccessControlProps accessControlProps)  $default,) {final _that = this;
 switch (_that) {
 case _VpnProps():
-return $default(_that.enable,_that.systemProxy,_that.ipv6,_that.allowBypass,_that.dnsHijacking,_that.transparentProxy,_that.transparentProxyDns,_that.accessControlProps);case _:
+return $default(_that.enable,_that.systemProxy,_that.ipv6,_that.allowBypass,_that.dnsHijacking,_that.transparentProxy,_that.transparentProxyDns,_that.transparentProxyIpv6,_that.accessControlProps);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1461,10 +1462,10 @@ return $default(_that.enable,_that.systemProxy,_that.ipv6,_that.allowBypass,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool enable,  bool systemProxy,  bool ipv6,  bool allowBypass,  bool dnsHijacking,  bool transparentProxy,  bool transparentProxyDns,  AccessControlProps accessControlProps)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool enable,  bool systemProxy,  bool ipv6,  bool allowBypass,  bool dnsHijacking,  bool transparentProxy,  bool transparentProxyDns,  bool transparentProxyIpv6,  AccessControlProps accessControlProps)?  $default,) {final _that = this;
 switch (_that) {
 case _VpnProps() when $default != null:
-return $default(_that.enable,_that.systemProxy,_that.ipv6,_that.allowBypass,_that.dnsHijacking,_that.transparentProxy,_that.transparentProxyDns,_that.accessControlProps);case _:
+return $default(_that.enable,_that.systemProxy,_that.ipv6,_that.allowBypass,_that.dnsHijacking,_that.transparentProxy,_that.transparentProxyDns,_that.transparentProxyIpv6,_that.accessControlProps);case _:
   return null;
 
 }
@@ -1476,7 +1477,7 @@ return $default(_that.enable,_that.systemProxy,_that.ipv6,_that.allowBypass,_tha
 @JsonSerializable()
 
 class _VpnProps implements VpnProps {
-  const _VpnProps({this.enable = true, this.systemProxy = true, this.ipv6 = false, this.allowBypass = true, this.dnsHijacking = false, this.transparentProxy = false, this.transparentProxyDns = true, this.accessControlProps = defaultAccessControlProps});
+  const _VpnProps({this.enable = true, this.systemProxy = true, this.ipv6 = false, this.allowBypass = true, this.dnsHijacking = false, this.transparentProxy = false, this.transparentProxyDns = true, this.transparentProxyIpv6 = false, this.accessControlProps = defaultAccessControlProps});
   factory _VpnProps.fromJson(Map<String, dynamic> json) => _$VpnPropsFromJson(json);
 
 @override@JsonKey() final  bool enable;
@@ -1486,6 +1487,7 @@ class _VpnProps implements VpnProps {
 @override@JsonKey() final  bool dnsHijacking;
 @override@JsonKey() final  bool transparentProxy;
 @override@JsonKey() final  bool transparentProxyDns;
+@override@JsonKey() final  bool transparentProxyIpv6;
 @override@JsonKey() final  AccessControlProps accessControlProps;
 
 /// Create a copy of VpnProps
@@ -1501,18 +1503,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _VpnProps&&(identical(other.enable, enable) || other.enable == enable)&&(identical(other.systemProxy, systemProxy) || other.systemProxy == systemProxy)&&(identical(other.ipv6, ipv6) || other.ipv6 == ipv6)&&(identical(other.allowBypass, allowBypass) || other.allowBypass == allowBypass)&&(identical(other.dnsHijacking, dnsHijacking) || other.dnsHijacking == dnsHijacking)&&(identical(other.transparentProxy, transparentProxy) || other.transparentProxy == transparentProxy)&&(identical(other.transparentProxyDns, transparentProxyDns) || other.transparentProxyDns == transparentProxyDns)&&(identical(other.accessControlProps, accessControlProps) || other.accessControlProps == accessControlProps));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _VpnProps&&(identical(other.enable, enable) || other.enable == enable)&&(identical(other.systemProxy, systemProxy) || other.systemProxy == systemProxy)&&(identical(other.ipv6, ipv6) || other.ipv6 == ipv6)&&(identical(other.allowBypass, allowBypass) || other.allowBypass == allowBypass)&&(identical(other.dnsHijacking, dnsHijacking) || other.dnsHijacking == dnsHijacking)&&(identical(other.transparentProxy, transparentProxy) || other.transparentProxy == transparentProxy)&&(identical(other.transparentProxyDns, transparentProxyDns) || other.transparentProxyDns == transparentProxyDns)&&(identical(other.transparentProxyIpv6, transparentProxyIpv6) || other.transparentProxyIpv6 == transparentProxyIpv6)&&(identical(other.accessControlProps, accessControlProps) || other.accessControlProps == accessControlProps));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,enable,systemProxy,ipv6,allowBypass,dnsHijacking,transparentProxy,transparentProxyDns,accessControlProps);
+    return Object.hash(runtimeType,enable,systemProxy,ipv6,allowBypass,dnsHijacking,transparentProxy,transparentProxyDns,transparentProxyIpv6,accessControlProps);
 }
 
 @override
 String toString() {
-    return 'VpnProps(enable: $enable, systemProxy: $systemProxy, ipv6: $ipv6, allowBypass: $allowBypass, dnsHijacking: $dnsHijacking, transparentProxy: $transparentProxy, transparentProxyDns: $transparentProxyDns, accessControlProps: $accessControlProps)';
+    return 'VpnProps(enable: $enable, systemProxy: $systemProxy, ipv6: $ipv6, allowBypass: $allowBypass, dnsHijacking: $dnsHijacking, transparentProxy: $transparentProxy, transparentProxyDns: $transparentProxyDns, transparentProxyIpv6: $transparentProxyIpv6, accessControlProps: $accessControlProps)';
 }
 
 
@@ -1523,7 +1525,7 @@ abstract mixin class _$VpnPropsCopyWith<$Res> implements $VpnPropsCopyWith<$Res>
   factory _$VpnPropsCopyWith(_VpnProps value, $Res Function(_VpnProps) _then) = __$VpnPropsCopyWithImpl;
 @override @useResult
 $Res call({
- bool enable, bool systemProxy, bool ipv6, bool allowBypass, bool dnsHijacking, bool transparentProxy, bool transparentProxyDns, AccessControlProps accessControlProps
+ bool enable, bool systemProxy, bool ipv6, bool allowBypass, bool dnsHijacking, bool transparentProxy, bool transparentProxyDns, bool transparentProxyIpv6, AccessControlProps accessControlProps
 });
 
 
@@ -1540,7 +1542,7 @@ class __$VpnPropsCopyWithImpl<$Res>
 
 /// Create a copy of VpnProps
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? enable = null,Object? systemProxy = null,Object? ipv6 = null,Object? allowBypass = null,Object? dnsHijacking = null,Object? transparentProxy = null,Object? transparentProxyDns = null,Object? accessControlProps = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? enable = null,Object? systemProxy = null,Object? ipv6 = null,Object? allowBypass = null,Object? dnsHijacking = null,Object? transparentProxy = null,Object? transparentProxyDns = null,Object? transparentProxyIpv6 = null,Object? accessControlProps = null,}) {
   return _then(_VpnProps(
 enable: null == enable ? _self.enable : enable // ignore: cast_nullable_to_non_nullable
 as bool,systemProxy: null == systemProxy ? _self.systemProxy : systemProxy // ignore: cast_nullable_to_non_nullable
@@ -1549,6 +1551,7 @@ as bool,allowBypass: null == allowBypass ? _self.allowBypass : allowBypass // ig
 as bool,dnsHijacking: null == dnsHijacking ? _self.dnsHijacking : dnsHijacking // ignore: cast_nullable_to_non_nullable
 as bool,transparentProxy: null == transparentProxy ? _self.transparentProxy : transparentProxy // ignore: cast_nullable_to_non_nullable
 as bool,transparentProxyDns: null == transparentProxyDns ? _self.transparentProxyDns : transparentProxyDns // ignore: cast_nullable_to_non_nullable
+as bool,transparentProxyIpv6: null == transparentProxyIpv6 ? _self.transparentProxyIpv6 : transparentProxyIpv6 // ignore: cast_nullable_to_non_nullable
 as bool,accessControlProps: null == accessControlProps ? _self.accessControlProps : accessControlProps // ignore: cast_nullable_to_non_nullable
 as AccessControlProps,
   ));

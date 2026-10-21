@@ -479,6 +479,7 @@
   "redirPort": "Порт Redir",
   "transparentProxy": "Прозрачный прокси с root",
   "transparentProxyDns": "Перенаправлять DNS в ядро",
+  "transparentProxyIpv6": "Отклонять IPv6 для перенаправляемых приложений",
   "transparentProxyDesc": "Через su устанавливает правила iptables и направляет системный TCP-трафик на порт redir, поэтому устройство, которому отказано в VPN, тоже может проксироваться, не занимая VpnService. Нужен root, правила исчезают после перезагрузки. UDP (QUIC и другое) не перенаправляется. В профиле должен быть порт redir.",
   "tproxyPort": "Порт TProxy",
   "portTip": "Значение «{label}» должно быть от 1024 до 49151",

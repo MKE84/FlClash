@@ -158,6 +158,7 @@ _VpnOptions _$VpnOptionsFromJson(Map<String, dynamic> json) => _VpnOptions(
   transparentProxyDns: json['transparentProxyDns'] as bool? ?? true,
   redirectPort: (json['redirectPort'] as num?)?.toInt() ?? 0,
   dnsRedirectPort: (json['dnsRedirectPort'] as num?)?.toInt() ?? 0,
+  transparentProxyIpv6: json['transparentProxyIpv6'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$VpnOptionsToJson(_VpnOptions instance) =>
@@ -178,6 +179,7 @@ Map<String, dynamic> _$VpnOptionsToJson(_VpnOptions instance) =>
       'transparentProxyDns': instance.transparentProxyDns,
       'redirectPort': instance.redirectPort,
       'dnsRedirectPort': instance.dnsRedirectPort,
+      'transparentProxyIpv6': instance.transparentProxyIpv6,
     };
 
 _InitParams _$InitParamsFromJson(Map<String, dynamic> json) => _InitParams(

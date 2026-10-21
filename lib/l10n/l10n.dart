@@ -3835,6 +3835,16 @@ class AppLocalizations {
     );
   }
 
+  /// `Refuse IPv6 for the apps the redirect covers`
+  String get transparentProxyIpv6 {
+    return Intl.message(
+      'Refuse IPv6 for the apps the redirect covers',
+      name: 'transparentProxyIpv6',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Installs iptables rules through su and points system TCP traffic at the redir port, so a device whose VPN is refused can still be routed, without a VpnService. The rules need root and disappear on reboot. UDP is not redirected: QUIC and other UDP traffic leaves directly. The profile needs a redir port.`
   String get transparentProxyDesc {
     return Intl.message(

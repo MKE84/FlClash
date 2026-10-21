@@ -1935,6 +1935,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "transparentProxyDns": MessageLookupByLibrary.simpleMessage(
       "Rediriger le DNS vers le cœur",
     ),
+    "transparentProxyIpv6": MessageLookupByLibrary.simpleMessage(
+      "Refuser l\'IPv6 pour les applications redirigées",
+    ),
     "transport": MessageLookupByLibrary.simpleMessage("Transport"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(

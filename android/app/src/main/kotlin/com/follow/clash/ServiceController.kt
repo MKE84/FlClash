@@ -16,7 +16,9 @@ import com.follow.clash.service.ServiceConfig
 import com.follow.clash.service.VpnService
 import com.follow.clash.service.models.VpnOptions
 import com.follow.clash.service.transparent.TransparentProxyController
+import com.follow.clash.service.transparent.redirectSelection
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -26,6 +28,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import java.net.InetSocketAddress
+import java.net.Socket
 import kotlin.coroutines.resume
 
 object ServiceController {
@@ -114,7 +118,16 @@ object ServiceController {
         Core.startListener()
         val redirect = options.transparentProxyOptions
         if (redirect.usable) {
-            val applied = runCatching { TransparentProxyController.apply(redirect) }
+            val applied = runCatching {
+                awaitListening(redirect.redirectPort)
+                val selection = redirectSelection(
+                    GlobalState.application,
+                    options.accessControlProps,
+                )
+                withContext(Dispatchers.IO) {
+                    TransparentProxyController.apply(redirect, selection)
+                }
+            }
             if (applied.isFailure) {
                 GlobalState.log("Unable to redirect through the transparent proxy: ${applied.exceptionOrNull()}")
                 tearDownServices()
@@ -129,6 +142,21 @@ object ServiceController {
         )
         true
     }
+
+    private suspend fun awaitListening(port: Int, timeoutMillis: Long = 3_000) =
+        withContext(Dispatchers.IO) {
+            val deadline = System.currentTimeMillis() + timeoutMillis
+            while (System.currentTimeMillis() < deadline) {
+                val listening = runCatching {
+                    Socket().use { it.connect(InetSocketAddress("127.0.0.1", port), 200) }
+                }.isSuccess
+                if (listening) {
+                    return@withContext true
+                }
+                delay(50)
+            }
+            false
+        }
 
     suspend fun stop() = lock.withLock {
         tearDownServices()

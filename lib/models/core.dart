@@ -90,6 +90,7 @@ abstract class VpnOptions with _$VpnOptions {
     @Default(true) bool transparentProxyDns,
     @Default(0) int redirectPort,
     @Default(0) int dnsRedirectPort,
+    @Default(false) bool transparentProxyIpv6,
   }) = _VpnOptions;
 
   factory VpnOptions.fromJson(Map<String, Object?> json) =>
@@ -97,6 +98,20 @@ abstract class VpnOptions with _$VpnOptions {
 }
 
 extension VpnOptionsExt on VpnOptions {
+  AccessControlProps get _selectedPackages {
+    final accessControl = accessControlProps;
+    if (!accessControl.enable) {
+      return const AccessControlProps();
+    }
+    final accepts = accessControl.mode == AccessControlMode.acceptSelected;
+    return AccessControlProps(
+      enable: true,
+      mode: accessControl.mode,
+      acceptList: accepts ? accessControl.acceptList : const [],
+      rejectList: accepts ? const [] : accessControl.rejectList,
+    );
+  }
+
   VpnOptions get effective {
     if (!enable) {
       final transparentProxy = this.transparentProxy;
@@ -107,7 +122,9 @@ extension VpnOptionsExt on VpnOptions {
         port: 0,
         ipv6: false,
         dnsHijacking: false,
-        accessControlProps: const AccessControlProps(),
+        accessControlProps: transparentProxy
+            ? _selectedPackages
+            : const AccessControlProps(),
         allowBypass: false,
         systemProxy: false,
         bypassDomain: const [],
@@ -116,10 +133,9 @@ extension VpnOptionsExt on VpnOptions {
         transparentProxyDns: transparentProxy && transparentProxyDns,
         redirectPort: transparentProxy ? redirectPort : 0,
         dnsRedirectPort: dnsRedirect ? dnsRedirectPort : 0,
+        transparentProxyIpv6: transparentProxy && transparentProxyIpv6,
       );
     }
-    final accessControl = accessControlProps;
-    final accepts = accessControl.mode == AccessControlMode.acceptSelected;
     return copyWith(
       port: systemProxy ? port : 0,
       bypassDomain: systemProxy ? bypassDomain : const [],
@@ -127,14 +143,8 @@ extension VpnOptionsExt on VpnOptions {
       transparentProxyDns: false,
       redirectPort: 0,
       dnsRedirectPort: 0,
-      accessControlProps: accessControl.enable
-          ? AccessControlProps(
-              enable: true,
-              mode: accessControl.mode,
-              acceptList: accepts ? accessControl.acceptList : const [],
-              rejectList: accepts ? const [] : accessControl.rejectList,
-            )
-          : const AccessControlProps(),
+      transparentProxyIpv6: false,
+      accessControlProps: _selectedPackages,
     );
   }
 }

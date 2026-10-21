@@ -77,6 +77,11 @@ final _toggleCases = <_ToggleCase>[
     initial: true,
   ),
   _ToggleCase(
+    'transparent proxy ipv6',
+    const TransparentProxyIpv6Item(),
+    (c) => c.read(vpnSettingProvider).transparentProxyIpv6,
+  ),
+  _ToggleCase(
     'bypass private route',
     const BypassPrivateRouteItem(),
     (c) => c.read(networkSettingProvider).bypassPrivateRoute,
@@ -132,6 +137,20 @@ void main() {
         expect(testCase.read(container), testCase.initial);
       });
     }
+  });
+
+  testWidgets('the root switch leaves the saved ports alone', (tester) async {
+    await pumpItem(tester, const TransparentProxyItem());
+    final before = container.read(patchClashConfigProvider);
+
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+
+    final after = container.read(patchClashConfigProvider);
+    expect(container.read(vpnSettingProvider).transparentProxy, isTrue);
+    expect(after.redirPort, before.redirPort);
+    expect(after.dns.listen, before.dns.listen);
+    expect(after.dnsOverrideKeys, before.dnsOverrideKeys);
   });
 
   group('option pickers', () {

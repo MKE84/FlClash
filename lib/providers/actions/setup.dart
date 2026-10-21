@@ -594,16 +594,17 @@ class SetupAction extends _$SetupAction {
         externalController: ExternalControllerStatus.close,
       );
     }
+    final config = ref.read(vpnSettingProvider).transparentProxy
+        ? redirectingPorts(patchConfig)
+        : patchConfig;
     final authorized =
         ref.read(authorizedTunEnableProvider) ==
         TunAuthorizationState.authorized;
-    return patchConfig.copyWith(
-      tun: patchConfig.tun.copyWith(
-        enable: patchConfig.tun.enable && authorized,
-      ),
-      externalController: patchConfig.secret.isEmpty
+    return config.copyWith(
+      tun: config.tun.copyWith(enable: config.tun.enable && authorized),
+      externalController: config.secret.isEmpty
           ? ExternalControllerStatus.close
-          : patchConfig.externalController,
+          : config.externalController,
     );
   }
 

@@ -95,31 +95,22 @@ class TransparentProxyItem extends ConsumerWidget {
                 enable: value ? false : state.enable,
               ),
             );
-        if (!value) {
-          return;
-        }
-        ref
-            .read(patchClashConfigProvider.notifier)
-            .update(enableTransparentProxyPorts);
       },
     );
   }
 }
 
-PatchClashConfig enableTransparentProxyPorts(PatchClashConfig config) {
-  const dnsListen = '127.0.0.1:1053';
-  final listen = config.dns.listen;
-  final dnsKeys = config.dnsOverrideKeys;
-  final needsDns = listen.isEmpty;
-  return config.copyWith(
-    redirPort: config.redirPort == 0 ? defaultRedirPort : config.redirPort,
-    dns: needsDns
-        ? config.dns.copyWith(enable: true, listen: dnsListen)
-        : config.dns,
-    dnsOverrideKeys: needsDns
-        ? {...dnsKeys, DnsOverrideKey.enable, DnsOverrideKey.listen}
-        : dnsKeys,
-  );
+class TransparentProxyIpv6Item extends ConsumerWidget {
+  const TransparentProxyIpv6Item({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    return _vpnToggle(
+      title: (l) => l.transparentProxyIpv6,
+      select: (state) => state.transparentProxyIpv6,
+      update: (state, value) => state.copyWith(transparentProxyIpv6: value),
+    );
+  }
 }
 
 class TransparentProxyDnsItem extends ConsumerWidget {
@@ -591,7 +582,11 @@ class VpnSections extends ConsumerWidget {
         ),
         generateSection(
           title: appLocalizations.transparentProxy,
-          items: const [TransparentProxyItem(), TransparentProxyDnsItem()],
+          items: const [
+            TransparentProxyItem(),
+            TransparentProxyDnsItem(),
+            TransparentProxyIpv6Item(),
+          ],
           footer: appLocalizations.transparentProxyDesc,
         ),
       ],

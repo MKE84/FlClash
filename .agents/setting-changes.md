@@ -114,6 +114,25 @@ each other in `lib/views/config/network.dart`. `ServiceController.start` writes 
 `ProxyService`, whose `onDestroy` is the last caller when the process goes away without a clean stop. A redirect the
 service could not write fails the start instead of running without it.
 
+The chain covers every app unless access control names some: a whitelist redirects only the accepted packages, a
+blacklist returns the rejected ones direct, and both resolve packages to uids in `AccessUids.kt` the way
+`VpnService.configureAccessControl` hands them to the system. IPv6 cannot reach a listener bound on loopback, so
+`transparentProxyIpv6` refuses it with `ip6tables` for exactly the apps the chain covers and leaves the rest on IPv6.
+That refusal is off by default because it costs a v6-only network its connectivity.
+
+A chain outlives the process that wrote it, so a run killed without a stop would leave every covered app talking to a
+closed port. The controller keeps a marker file while rules exist and `FlClashApplication` clears them on the next
+launch; the start path also waits for the redir port to answer before writing rules, because the core binds its
+inbound asynchronously. Both the rules and the teardown travel as one `su -c` script once the prompt is behind us,
+which is one fork instead of one per rule; the fallback to a command at a time is what names the command that failed.
+
+Its ports belong to the run, not to the settings: `redirectingPorts` in `lib/models/clash_config.dart` fills in a redir
+port and a loopback DNS address for `_effectivePatchConfig` and `vpnOptions` alike, so a mode that is off leaves no
+listener behind for the next run and the Core and the rules always name the same ports. The switch itself therefore
+takes the restart path through `TransparentProxy` in `ServiceRuntime`, not a config write. The chain returns before the
+redirect for the Core's own uid, for loopback and for the local network, so a run keeps reachable the router and the
+devices on it.
+
 To add a VPN option:
 
 1. Add it to Dart and Kotlin `VpnOptions` and to `vpnOptionsProvider`.

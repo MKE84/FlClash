@@ -222,6 +222,7 @@ _VpnProps _$VpnPropsFromJson(Map<String, dynamic> json) => _VpnProps(
   dnsHijacking: json['dnsHijacking'] as bool? ?? false,
   transparentProxy: json['transparentProxy'] as bool? ?? false,
   transparentProxyDns: json['transparentProxyDns'] as bool? ?? true,
+  transparentProxyIpv6: json['transparentProxyIpv6'] as bool? ?? false,
   accessControlProps: json['accessControlProps'] == null
       ? defaultAccessControlProps
       : AccessControlProps.fromJson(
@@ -237,6 +238,7 @@ Map<String, dynamic> _$VpnPropsToJson(_VpnProps instance) => <String, dynamic>{
   'dnsHijacking': instance.dnsHijacking,
   'transparentProxy': instance.transparentProxy,
   'transparentProxyDns': instance.transparentProxyDns,
+  'transparentProxyIpv6': instance.transparentProxyIpv6,
   'accessControlProps': instance.accessControlProps,
 };
 

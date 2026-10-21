@@ -1884,6 +1884,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "transparentProxyDns": MessageLookupByLibrary.simpleMessage(
       "Перенаправлять DNS в ядро",
     ),
+    "transparentProxyIpv6": MessageLookupByLibrary.simpleMessage(
+      "Отклонять IPv6 для перенаправляемых приложений",
+    ),
     "transport": MessageLookupByLibrary.simpleMessage("Транспорт"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunAuthorizationFailed": MessageLookupByLibrary.simpleMessage(

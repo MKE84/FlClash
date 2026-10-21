@@ -42,6 +42,41 @@ const defaultGeoXUrl = {
 
 const defaultMixedPort = 7890;
 const defaultRedirPort = 7892;
+
+const redirectDnsListen = '127.0.0.1:1053';
+
+int redirectingRedirPort(int redirPort) =>
+    redirPort == 0 ? defaultRedirPort : redirPort;
+
+String redirectingDnsListen(String listen) =>
+    _isLoopbackListen(listen) ? listen : redirectDnsListen;
+
+bool _isLoopbackListen(String listen) {
+  final uri = Uri.tryParse('tcp://$listen');
+  if (uri == null || uri.port < 1024) {
+    return false;
+  }
+  final host = uri.host;
+  return host == '127.0.0.1' || host == '::1' || host == 'localhost';
+}
+
+PatchClashConfig redirectingPorts(PatchClashConfig config) {
+  final needsDns = !_isLoopbackListen(config.dns.listen);
+  return config.copyWith(
+    redirPort: redirectingRedirPort(config.redirPort),
+    dns: needsDns
+        ? config.dns.copyWith(enable: true, listen: redirectDnsListen)
+        : config.dns,
+    dnsOverrideKeys: needsDns
+        ? {
+            ...config.dnsOverrideKeys,
+            DnsOverrideKey.enable,
+            DnsOverrideKey.listen,
+          }
+        : config.dnsOverrideKeys,
+  );
+}
+
 const defaultKeepAliveInterval = 30;
 const defaultTunMtu = 9000;
 const minTunMtu = 1280;
